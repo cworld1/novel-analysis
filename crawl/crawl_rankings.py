@@ -1,3 +1,4 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 
@@ -8,10 +9,11 @@ class CrawlRankings:
         "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15",
         "Cookie": "traffic_utm_referer=https%3A//baidu.com/; landing_page=/; _csrfToken=hvHCmVgFbWDa0O1VEOYIS5BQnpfn2rk3AC4nPP8w; fuid=660bb66c74dbb; newstatisticUUID=1712043628_888611462",
     }
-    filename = "ranking.vsc"
+    filename = "ranking.csv"
 
     def __init__(self, path="./data/") -> None:
         self.path = path
+        os.makedirs(self.path, exist_ok=True)
 
     def crawl(self, callback=None):
         resp = requests.get(url=self.url, headers=self.headers).text.encode("UTF-8")
