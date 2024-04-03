@@ -1,6 +1,5 @@
-import os
+import os, json
 import requests
-import json
 
 
 class CrawlInfo:
