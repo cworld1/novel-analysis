@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 class AnalType:
     file = "books.csv"
     color = "skyblue"
+    color = "skyblue"
 
     def __init__(self, path="./data") -> None:
         self.path = path
@@ -39,6 +40,7 @@ class AnalType:
         plt.bar(
             list(type_popularity.keys()),
             list(type_popularity.values()),
+            color=self.color,
             color=self.color,
         )
         plt.title(context["title"])
@@ -129,6 +131,7 @@ class AnalType:
                 "ylabel": "Mean Popularity",
             }
             self.draw_bar(type_counts, type_popularity, context)
+
         elif shape == "pie":
             # Draw pie plot
             context = {"title": "Popularity by Type"}
