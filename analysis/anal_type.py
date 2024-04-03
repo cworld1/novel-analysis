@@ -23,12 +23,22 @@ class AnalType:
             return int(float(popularity.replace("万", "")) * 10000)
         return int(popularity)
 
-    def anal_draw(self, data: dict, context: dict):
+    def draw_bar(self, type_counts: dict, type_popularity: dict, context: dict):
+
+        # Calculate mean popularity
+        for key in type_popularity:
+            type_popularity[key] /= type_counts[key]
+        type_popularity = dict(
+            sorted(type_popularity.items(), key=lambda x: x[1], reverse=True)
+        )
+        # for key, value in type_popularity:
+        #     print(key, value)
+
         # Create bar plot
         plt.figure(figsize=(10, 6))
         plt.bar(
-            list(data.keys()),
-            list(data.values()),
+            list(type_popularity.keys()),
+            list(type_popularity.values()),
             color="skyblue",
         )
         plt.title(context["title"])
@@ -62,15 +72,6 @@ class AnalType:
                     type_counts[row["Type"]] += 1
 
         # print(type_counts)
-        # Calculate mean popularity
-        for key in type_popularity:
-            type_popularity[key] /= type_counts[key]
-        # 对 type_popularity 进行排序
-        type_popularity = dict(
-            sorted(type_popularity.items(), key=lambda x: x[1], reverse=True)
-        )
-        # for key, value in type_popularity:
-        #     print(key, value)
 
         # Draw the plot
         context = {
@@ -78,7 +79,7 @@ class AnalType:
             "xlabel": "Type",
             "ylabel": "Mean Popularity",
         }
-        self.anal_draw(type_popularity, context)
+        self.draw_bar(type_counts, type_popularity, context)
 
 
 # Test
