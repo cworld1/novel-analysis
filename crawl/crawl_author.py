@@ -41,20 +41,19 @@ class CrawlAuthor:
         return text
 
     def crawl(self, ids, callback=None):
-        for id in ids:
-            file = open(self.path + self.filename, "w", encoding="utf-8")
-            file.write(
-                f"BookId,Name,TotalWorks,TotalWords,TotalDays,LevelTag,ImgLink\n"
-            )
+        file = open(self.path + self.filename, "w", encoding="utf-8")
+        file.write(f"BookId,Name,TotalWorks,TotalWords,TotalDays,LevelTag,ImgLink\n")
 
+        for id in ids:
             text = self.crawl_data(id)
             file.write("%s\n" % text)
             if callback is not None:
                 callback(id)
+
         file.close()
 
 
 # Test
 crawler = CrawlAuthor()
-crawler.crawl([8263527304935303])
+crawler.crawl([8263527304935303, 17536776207350304])
 # crawler.crawl(lambda id: print(id))
