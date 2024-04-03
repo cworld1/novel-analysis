@@ -8,28 +8,41 @@
 
 Environment requirements:
 
-<!-- - [SDK](https://developer.android.com/tools/releases/platforms): Android 14.0 ("UpsideDownCake")
+- [Python](https://www.python.org/downloads/): 3.8+
 
-  - Android SDK Platform 34
-  - Sources for Android 34
-  - Google APls Intel x86_64 Atom System Image
+1. Clone the repository:
 
-- [Android Gradle Plugin Version](https://developer.android.com/build/agp-upgrade-assistant): 8.1.4
+   ```shell
+   git clone https://github.com/cworld1/novel-analysis.git
+   cd novel-analysis
+   ```
 
-- Gradle Version: 8.0 -->
+2. Create a virtual environment:
 
-### 1. Clone the repository
+   ```shell
+   python -m venv .venv
+   source .venv/bin/activate
+   ```
+
+   Or you can use tools for your own:
+
+   - [virtualenv](https://virtualenv.pypa.io/en/latest/)
+   - [pipenv](https://pipenv.pypa.io/en/latest/)
+   - [poetry](https://python-poetry.org/)
+   - [conda](https://docs.conda.io/en/latest/)
+   - [uv](https://github.com/astral-sh/uv)
+
+3. Install the dependencies:
+
+   ```shell
+   pip install -r requirements.txt
+   ```
+
+### Run crawler script
 
 ```shell
-git clone https://github.com/cworld1/novel-analysis.git
-cd novel-analysis
+python ./crawl/main.py
 ```
-
-<!-- ### 2. Open the code using Android Studio
-
-```shell
-studio64 .
-``` -->
 
 ## Contributions
 
@@ -41,10 +54,8 @@ If the style guide is not explicit about a particular situation, the cardinal ru
 
 ## Thanks
 
-<!-- - [Android Developer Document](https://developer.android.com/)
-- [Google Fonts Icons](https://fonts.google.com/icons)
-- [Material Design](https://m3.material.io/)
-- [Markwon](https://github.com/novel-analysiss/Markwon) -->
+- [文心中文心理分析系统 (Text Mind)](http://ccpl.psych.ac.cn/textmind/)
+- [Jieba](https://github.com/fxsjy/jieba)
 
 ## License
 
