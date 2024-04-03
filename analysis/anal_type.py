@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 class AnalType:
     file = "books.csv"
+    color = "skyblue"
 
     def __init__(self, path="./data") -> None:
         self.path = path
@@ -23,8 +24,7 @@ class AnalType:
             return int(float(popularity.replace("万", "")) * 10000)
         return int(popularity)
 
-    def draw_bar(self, type_counts: dict, type_popularity: dict, context: dict):
-
+    def draw_bar(self, type_counts: dict, type_popularity: dict, context):
         # Calculate mean popularity
         for key in type_popularity:
             type_popularity[key] /= type_counts[key]
@@ -39,7 +39,7 @@ class AnalType:
         plt.bar(
             list(type_popularity.keys()),
             list(type_popularity.values()),
-            color="skyblue",
+            color=self.color,
         )
         plt.title(context["title"])
         plt.xlabel(context["xlabel"])
@@ -49,6 +49,7 @@ class AnalType:
 
         # Show plot
         plt.show()
+
     def draw_pie(self, type_counts: dict, custom_colors: list):
         # Data to plot
         labels = []
@@ -65,30 +66,40 @@ class AnalType:
 
         # If there is 'Other' data, add it
         if other_size > 0:
-            labels.append('其他')
+            labels.append("其他")
             sizes.append(other_size)
 
         # Prepare custom colors for the plot
         if len(custom_colors) >= len(labels):
-            colors = custom_colors[:len(labels)]
+            colors = custom_colors[: len(labels)]
         else:
-            colors = custom_colors + ['grey'] * (len(labels) - len(custom_colors))  # Fill up with grey if not enough colors
-        
-        explode = [0.1 if i == max(sizes) else 0 for i in sizes]  # Only explode the largest slice
-        
+            colors = custom_colors + ["grey"] * (
+                len(labels) - len(custom_colors)
+            )  # Fill up with grey if not enough colors
+
+        explode = [
+            0.1 if i == max(sizes) else 0 for i in sizes
+        ]  # Only explode the largest slice
+
         # Plot
         plt.figure(figsize=(8, 8))
-        plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct=lambda p: '{:.1f}%'.format(p) if p >= 3 else '',
-                shadow=True, startangle=140)
-        plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-        plt.title('Composition of Novel Types')
+        plt.pie(
+            sizes,
+            explode=explode,
+            labels=labels,
+            colors=colors,
+            autopct=lambda p: "{:.1f}%".format(p) if p >= 3 else "",
+            shadow=True,
+            startangle=140,
+        )
+        plt.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
+        plt.title("Composition of Novel Types")
         plt.tight_layout()
 
         # Show plot
         plt.show()
 
-        
-    def anal(self):
+    def anal(self, shape="bar"):
         type_popularity = {}
         type_counts = {}
 
@@ -108,22 +119,32 @@ class AnalType:
                 else:
                     type_popularity[row["Type"]] += pop
                     type_counts[row["Type"]] += 1
-
         # print(type_counts)
 
-        # Draw the plot
-        context = {
-            "title": "Mean Popularity by Type",
-            "xlabel": "Type",
-            "ylabel": "Mean Popularity",
-        }
-        self.draw_bar(type_counts, type_popularity, context)
-# Define the custom colors
-        custom_colors = ["#FFE45E", "#78AA8D", "#8F7C7B", "#8C845A", "#FF6A5E", "#5EFFA2", "#655EFF"]
+        if shape == "bar":
+            # Draw bar plot
+            context = {
+                "title": "Mean Popularity by Type",
+                "xlabel": "Type",
+                "ylabel": "Mean Popularity",
+            }
+            self.draw_bar(type_counts, type_popularity, context)
+        elif shape == "pie":
+            # Draw pie plot
+            context = {"title": "Popularity by Type"}
+            # Define the custom colors
+            custom_colors = [
+                "#FFE45E",
+                "#78AA8D",
+                "#8F7C7B",
+                "#8C845A",
+                "#FF6A5E",
+                "#5EFFA2",
+                "#655EFF",
+            ]
 
-        # Draw the pie chart with custom colors
-        self.draw_pie(type_counts, custom_colors)
-    
+            # Draw the pie chart with custom colors
+            self.draw_pie(type_counts, custom_colors)
 
 
 # Test
