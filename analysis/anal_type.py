@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 class AnalType:
     file = "books.csv"
+    color = "skyblue"
 
     def __init__(self, path="./data") -> None:
         self.path = path
@@ -23,8 +24,7 @@ class AnalType:
             return int(float(popularity.replace("万", "")) * 10000)
         return int(popularity)
 
-    def draw_bar(self, type_counts: dict, type_popularity: dict, context: dict):
-
+    def draw_bar(self, type_counts: dict, type_popularity: dict, context):
         # Calculate mean popularity
         for key in type_popularity:
             type_popularity[key] /= type_counts[key]
@@ -39,7 +39,7 @@ class AnalType:
         plt.bar(
             list(type_popularity.keys()),
             list(type_popularity.values()),
-            color="skyblue",
+            color=self.color,
         )
         plt.title(context["title"])
         plt.xlabel(context["xlabel"])
@@ -50,7 +50,7 @@ class AnalType:
         # Show plot
         plt.show()
 
-    def anal(self):
+    def anal(self, shape="bar"):
         type_popularity = {}
         type_counts = {}
 
@@ -70,16 +70,20 @@ class AnalType:
                 else:
                     type_popularity[row["Type"]] += pop
                     type_counts[row["Type"]] += 1
-
         # print(type_counts)
 
-        # Draw the plot
-        context = {
-            "title": "Mean Popularity by Type",
-            "xlabel": "Type",
-            "ylabel": "Mean Popularity",
-        }
-        self.draw_bar(type_counts, type_popularity, context)
+        if shape == "bar":
+            # Draw bar plot
+            context = {
+                "title": "Mean Popularity by Type",
+                "xlabel": "Type",
+                "ylabel": "Mean Popularity",
+            }
+            self.draw_bar(type_counts, type_popularity, context)
+        elif shape == "pie":
+            # Draw pie plot
+            context = {"title": "Popularity by Type"}
+            # self.draw_pie(type_counts, type_popularity, context)
 
 
 # Test
