@@ -66,8 +66,8 @@ class AnalType:
         for key in type_popularity:
             type_popularity[key] /= type_counts[key]
         # 对 type_popularity 进行排序
-        type_popularity = sorted(
-            type_popularity.items(), key=lambda x: x[1], reverse=True
+        type_popularity = dict(
+            sorted(type_popularity.items(), key=lambda x: x[1], reverse=True)
         )
         # for key, value in type_popularity:
         #     print(key, value)
