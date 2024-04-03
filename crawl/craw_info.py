@@ -4,6 +4,7 @@ import json
 
 
 class CrawlInfo:
+    url = "https://appapi.hongxiu.com/api/v3/book/info"
     headers = {
         "Host": "appapi.hongxiu.com",
         "Cookie": "appId=41; areaId=4; channel=appstore; qimei=+psPuwp3Th9neFAS0O3iFYfy8XgZ/UlijYHF2jp7iIhespUMicdyRAu3SNjphRI0; ywguid=-999; ywkey=",
@@ -19,19 +20,21 @@ class CrawlInfo:
     forceUpdate = False
 
     def __init__(self, path="./data/", forceUpdate=False) -> None:
-        self.path = path + "book_info/"
-        os.makedirs(self.path, exist_ok=True)
+        # Init path
+        self.detailed_path = path + "book_info/"
+        os.makedirs(self.detailed_path, exist_ok=True)
         self.forceUpdate = forceUpdate
 
     def crawl_data(self, id, i) -> json:
-        url = f"https://appapi.hongxiu.com/api/v3/book/info?bookId={id}&screen={i}"
-        response = requests.get(url, headers=self.headers)
-
+        # Request the page
+        response = requests.get(
+            url=f"{self.url}?bookId={id}&screen={i}", headers=self.headers
+        )
         if response.status_code != 200:
-            print(f"请求失败，状态码：{response.status_code}")
+            print(f"GET request faild{response.status_code}")
             return
 
-        # 获取返回的JSON数据
+        # Get the JSON data
         book_info = response.json()
         if book_info["msg"] != "成功":
             print(book_info["msg"])
@@ -41,7 +44,7 @@ class CrawlInfo:
 
     def deep_merge_dicts(self, dict1, dict2):
         """
-        深度合并两个字典
+        Deep merge dict2 into dict1
         """
         for key, value in dict2.items():
             if key in dict1:
@@ -53,24 +56,26 @@ class CrawlInfo:
                 dict1[key] = value
 
     def crawl(self, id: str):
-        file_path = os.path.join(self.path, f"{id}.json")
-        if not self.forceUpdate:
-            if os.path.exists(file_path):
-                return
+        # Check if the file already exists (only when forceUpdate is False)
+        file_path = os.path.join(self.detailed_path, f"{id}.json")
+        if not self.forceUpdate and os.path.exists(file_path):
+            return
 
+        # Get the data from the two screens and merge them
         data1 = self.crawl_data(id, 2)
         data2 = self.crawl_data(id, 1)
         merged_data = data1.copy()
         self.deep_merge_dicts(merged_data, data2)
 
-        # 将 merged_data 转换为 JSON 格式
+        # Write the data to the file
         json_data = json.dumps(
             merged_data, indent=4, ensure_ascii=False
-        )  # indent=4 用于美化输出，可选
+        )  # indent=4 for pretty print, optional
         with open(file_path, "w") as file:
             file.write(json_data)
         print("File write:", file_path)
 
 
+# Test
 crawler = CrawlInfo()
 crawler.crawl("8263527304935303")

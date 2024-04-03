@@ -12,34 +12,32 @@ class CrawlRankings:
     filename = "ranking.csv"
 
     def __init__(self, path="./data/") -> None:
+        # Init path
         self.path = path
         os.makedirs(self.path, exist_ok=True)
 
     def crawl(self, callback=None):
+        # Request the page
         resp = requests.get(url=self.url, headers=self.headers).text.encode("UTF-8")
-
-        # 在首页中解析出章节的标题和详情页的url
-        # 1.实例化BeautifulSoup对象，需要将页面源码数据加载到该对象中
         soup = BeautifulSoup(resp, "html.parser")
-        # 2.解析章节标题和详情页的url
+
+        # Select the module content
         module_content = soup.select(".main-content-wrap > .rank-body > .rank-list")
-        # return
 
         file = open(self.path + self.filename, "w", encoding="utf-8")
+        # Write the header
         file.write(f"Category,Rank,Title,BookId,Link\n")
 
         for content in module_content:
             element = content.find()
             if element.name != "h3":
                 continue
-
             # Get category
             category = element.text.strip()
             # print(category)
 
+            # For each category, get the ul list
             li_list = element.find_next_sibling("div").ul
-
-            # 在这里对 ul_element 进行处理，例如提取其中的文本或链接等
             for li in li_list.find_all("li"):
                 # print(li)
                 rank = li.span.text
@@ -49,12 +47,15 @@ class CrawlRankings:
                 file.write(
                     f"{category},{rank},{title},{id},https://www.hongxiu.com{url}\n"
                 )
+
+                # If callback is not None, call it (eg, to crawl the book info)
                 if callback is not None:
                     callback(id)
 
         file.close()
 
 
+# Test
 crawler = CrawlRankings()
 crawler.crawl()
 # crawler.crawl(lambda id: print(id))
