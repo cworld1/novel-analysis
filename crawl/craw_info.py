@@ -17,11 +17,12 @@ class CrawlInfo:
         "s": "LoveTagAB=0,YQFinishedAIAB=1,LoveFinishedAIAB=1,contentSourceType=1,MembershipGuideIsTheWeb=1,HXYQTabRec=1,YqTagAB=1,loveNewBookAB=1,ChannelMembershipGuideIsTheWeb=1,NewRechargeSDK4=0,newUserFeedTop=1,newUserBottomRecommend=1,yqNewBookAB=1,newUserPreload=1,HXYQLOV_RANK_AB=0,newUserReliefStationV2=1,newUserReliefStation=1,HXLoveTab=1,NewRechargeSDK=0,card_exit=1,HotRankDayAB=0,NewRechargeSDK2=0,vip_day=0",
         "Accept-Encoding": "gzip, deflate, br",
     }
+    detailed_path = "book_info/"
     forceUpdate = False
 
     def __init__(self, path="./data/", forceUpdate=False) -> None:
         # Init path
-        self.detailed_path = path + "book_info/"
+        self.detailed_path = path + self.detailed_path
         os.makedirs(self.detailed_path, exist_ok=True)
         self.forceUpdate = forceUpdate
 

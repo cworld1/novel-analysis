@@ -18,8 +18,8 @@ class CrawlRankings:
 
     def crawl(self, callback=None):
         # Request the page
-        resp = requests.get(url=self.url, headers=self.headers).text.encode("UTF-8")
-        soup = BeautifulSoup(resp, "html.parser")
+        resp = requests.get(url=self.url, headers=self.headers)
+        soup = BeautifulSoup(resp.text, "html.parser")
 
         # Select the module content
         module_content = soup.select(".main-content-wrap > .rank-body > .rank-list")
@@ -33,15 +33,15 @@ class CrawlRankings:
             if element.name != "h3":
                 continue
             # Get category
-            category = element.text.strip()
+            category = element.get_text(strip=True)
             # print(category)
 
             # For each category, get the ul list
             li_list = element.find_next_sibling("div").ul
             for li in li_list.find_all("li"):
                 # print(li)
-                rank = li.span.text
-                title = li.a.text.strip()
+                rank = li.span.get_text(strip=True)
+                title = li.a.text.get_text(strip=True)
                 url = li.a["href"]
                 id = url.split("/")[-1]
                 file.write(
