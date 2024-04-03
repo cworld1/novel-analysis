@@ -49,7 +49,45 @@ class AnalType:
 
         # Show plot
         plt.show()
+    def draw_pie(self, type_counts: dict, custom_colors: list):
+        # Data to plot
+        labels = []
+        sizes = []
+        other_size = 0  # Size for 'Other' category
+        total = sum(type_counts.values())
 
+        for key, count in type_counts.items():
+            if (count / total) * 100 >= 3:
+                labels.append(key)
+                sizes.append(count)
+            else:
+                other_size += count
+
+        # If there is 'Other' data, add it
+        if other_size > 0:
+            labels.append('其他')
+            sizes.append(other_size)
+
+        # Prepare custom colors for the plot
+        if len(custom_colors) >= len(labels):
+            colors = custom_colors[:len(labels)]
+        else:
+            colors = custom_colors + ['grey'] * (len(labels) - len(custom_colors))  # Fill up with grey if not enough colors
+        
+        explode = [0.1 if i == max(sizes) else 0 for i in sizes]  # Only explode the largest slice
+        
+        # Plot
+        plt.figure(figsize=(8, 8))
+        plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct=lambda p: '{:.1f}%'.format(p) if p >= 3 else '',
+                shadow=True, startangle=140)
+        plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        plt.title('Composition of Novel Types')
+        plt.tight_layout()
+
+        # Show plot
+        plt.show()
+
+        
     def anal(self):
         type_popularity = {}
         type_counts = {}
@@ -80,6 +118,12 @@ class AnalType:
             "ylabel": "Mean Popularity",
         }
         self.draw_bar(type_counts, type_popularity, context)
+# Define the custom colors
+        custom_colors = ["#FFE45E", "#78AA8D", "#8F7C7B", "#8C845A", "#FF6A5E", "#5EFFA2", "#655EFF"]
+
+        # Draw the pie chart with custom colors
+        self.draw_pie(type_counts, custom_colors)
+    
 
 
 # Test
