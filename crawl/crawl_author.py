@@ -39,7 +39,7 @@ class CrawlAuthor:
         )
         books = ";".join([li["class"][0][4:] for li in books_li])
 
-        return f"{author_id},{name},{total_works},{total_words},{total_days},{level_tag},{img_link},{books}"
+        return f'{author_id},{name},{total_works},{total_words},{total_days},{level_tag},"{img_link}",{books}'
 
     def crawl(self, ids, callback=None):
         file = open(self.path + self.filename, "w", encoding="utf-8")
