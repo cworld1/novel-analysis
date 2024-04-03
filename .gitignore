@@ -212,3 +212,4 @@ pyrightconfig.json
 ### Customize
 data/
 *.code-workspace
+.DS_Store
