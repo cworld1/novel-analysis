@@ -34,17 +34,20 @@ class CrawlAuthor:
             li.p.get_text(strip=True) for li in wrap_li
         ]
         # Get books
-        books_li = module_content.find("div", class_="other-works").div.ul.find_all(
-            "li"
-        )
-        books = ";".join([li["class"][0][4:] for li in books_li])
+        books_div = module_content.find("div", class_="other-works")
+        if books_div is None:
+            books = []
+        else:
+            books_li = books_div.div.ul.find_all("li")
+            books = [li["class"][0][4:] for li in books_li]
+
         if callback is not None:
             for id in books:
                 callback(id)
 
-        return f'{from_id},{name},{total_works},{total_words},{total_days},{level_tag},"{img_link}",{books}'
+        return f'{from_id},{name},{total_works},{total_words},{total_days},{level_tag},"{img_link}",{";".join(books)}'
 
-    def crawl(self, ids, callback=None):
+    def crawl(self, ids: list, callback=None):
         file = open(f"{self.path}/{self.filename}", "w", encoding="utf-8")
         file.write(
             f"BookId,Name,TotalWorks,TotalWords,TotalDays,LevelTag,ImgLink,Books\n"

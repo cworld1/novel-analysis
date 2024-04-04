@@ -16,7 +16,7 @@ class CrawlRankings:
         self.path = path
         os.makedirs(self.path, exist_ok=True)
 
-    def crawl(self, callback=None):
+    def crawl(self, callback=None) -> list:
         # Request the page
         resp = requests.get(url=self.url, headers=self.headers)
         soup = BeautifulSoup(resp.text, "html.parser")
@@ -28,6 +28,7 @@ class CrawlRankings:
         # Write the header
         file.write(f"Category,Rank,Title,BookId,Link\n")
 
+        ids = []
         for content in module_content:
             element = content.find()
             if element.name != "h3":
@@ -47,12 +48,15 @@ class CrawlRankings:
                 file.write(
                     f"{category},{rank},{title},{id},https://www.hongxiu.com{url}\n"
                 )
+                ids.append(id)
 
                 # If callback is not None, call it (eg, to crawl the book info)
                 if callback is not None:
                     callback(id)
 
         file.close()
+
+        return ids
 
 
 # Test
