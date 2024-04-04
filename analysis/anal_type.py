@@ -1,11 +1,12 @@
 import csv, platform
 import matplotlib.pyplot as plt
+from matplotlib import colormaps
 
 
 class AnalType:
     file = "books.csv"
     color = "skyblue"
-    color = "skyblue"
+    colors = "GnBu"
 
     def __init__(self, path="./data") -> None:
         self.path = path
@@ -71,25 +72,19 @@ class AnalType:
             labels.append("其他")
             sizes.append(other_size)
 
-        # Prepare custom colors for the plot
-        if len(custom_colors) >= len(labels):
-            colors = custom_colors[: len(labels)]
-        else:
-            colors = custom_colors + ["grey"] * (
-                len(labels) - len(custom_colors)
-            )  # Fill up with grey if not enough colors
-
+        # Highlight the biggest slice
         explode = [
             0.1 if i == max(sizes) else 0 for i in sizes
         ]  # Only explode the largest slice
 
         # Plot
+        colormap = colormaps[self.colors].resampled(len(sizes))
         plt.figure(figsize=(8, 8))
         plt.pie(
             sizes,
             explode=explode,
             labels=labels,
-            colors=colors,
+            colors=colormap(range(len(sizes))),
             autopct=lambda p: "{:.1f}%".format(p) if p >= 3 else "",
             shadow=True,
             startangle=140,
@@ -134,22 +129,10 @@ class AnalType:
 
         elif shape == "pie":
             # Draw pie plot
-            context = {"title": "Popularity by Type"}
-            # Define the custom colors
-            custom_colors = [
-                "#FFE45E",
-                "#78AA8D",
-                "#8F7C7B",
-                "#8C845A",
-                "#FF6A5E",
-                "#5EFFA2",
-                "#655EFF",
-            ]
-
-            # Draw the pie chart with custom colors
-            self.draw_pie(type_counts, custom_colors)
+            context = {"title": "Composition of Novel Types"}
+            self.draw_pie(type_counts, context)
 
 
 # Test
 anal_type = AnalType()
-anal_type.anal()
+anal_type.anal(shape="pie")
