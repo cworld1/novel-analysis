@@ -4,6 +4,15 @@
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/cworld1/novel-analysis?label=commits&style=flat-square)](https://github.com/cworld1/novel-analysis/commits)
 [![GitHub license](https://img.shields.io/github/license/cworld1/novel-analysis?style=flat-square)](https://github.com/cworld1/novel-analysis/blob/main/LICENSE) -->
 
+A simple project for analyzing Chinese novels. All data is crawled from [红袖读书](https://www.hongxiu.com/)
+
+## Project Structure
+
+- `anal`: Analysis scripts
+- `crawl`: Crawler scripts
+
+After running the crawler script, the data will be saved in the `data` directory.
+
 ## Local Development
 
 Environment requirements:
@@ -30,7 +39,7 @@ Environment requirements:
    - [pipenv](https://pipenv.pypa.io/en/latest/)
    - [poetry](https://python-poetry.org/)
    - [conda](https://docs.conda.io/en/latest/)
-   - [uv](https://github.com/astral-sh/uv)
+   - [uv](https://github.com/astral-sh/uv/)
 
 3. Install the dependencies:
 
@@ -54,8 +63,9 @@ If the style guide is not explicit about a particular situation, the cardinal ru
 
 ## Thanks
 
+- [红袖读书](https://www.hongxiu.com/)
 - [文心中文心理分析系统 (Text Mind)](http://ccpl.psych.ac.cn/textmind/)
-- [Jieba](https://github.com/fxsjy/jieba)
+- [Jieba](https://github.com/fxsjy/jieba/)
 
 ## License
 
