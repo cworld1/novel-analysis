@@ -41,7 +41,7 @@ class CrawlRankings:
             for li in li_list.find_all("li"):
                 # print(li)
                 rank = li.span.get_text(strip=True)
-                title = li.a.text.get_text(strip=True)
+                title = li.a.get_text(strip=True)
                 url = li.a["href"]
                 id = url.split("/")[-1]
                 file.write(
