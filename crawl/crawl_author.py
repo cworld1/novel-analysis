@@ -23,6 +23,8 @@ class CrawlAuthor:
 
         # Select the module content
         module_content = soup.select_one(".author-state > .info-wrap")
+        if module_content is None:
+            return f"{from_id},,,,,,,"
 
         # Get infos
         img_box_div = module_content.find("div", class_="img-box")
@@ -42,7 +44,9 @@ class CrawlAuthor:
             books = [li["class"][0][4:] for li in books_li]
 
         if callback is not None:
+            print(f"Callback for author: {name} (from bookid: {from_id})")
             for id in books:
+                print(f"Callback for author: {name} (from each book id: {id})")
                 callback(id)
 
         return f'{from_id},{name},{total_works},{total_words},{total_days},{level_tag},"{img_link}",{";".join(books)}'

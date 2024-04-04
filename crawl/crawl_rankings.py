@@ -52,6 +52,7 @@ class CrawlRankings:
 
                 # If callback is not None, call it (eg, to crawl the book info)
                 if callback is not None:
+                    print("Callback for book:", id)
                     callback(id)
 
         file.close()
