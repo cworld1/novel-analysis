@@ -11,7 +11,7 @@ class CrawlAuthor:
     }
     filename = "authors.csv"
 
-    def __init__(self, path="./data/") -> None:
+    def __init__(self, path="./data") -> None:
         # Init path
         self.path = path
         os.makedirs(self.path, exist_ok=True)
@@ -42,7 +42,7 @@ class CrawlAuthor:
         return f'{author_id},{name},{total_works},{total_words},{total_days},{level_tag},"{img_link}",{books}'
 
     def crawl(self, ids, callback=None):
-        file = open(self.path + self.filename, "w", encoding="utf-8")
+        file = open(f"{self.path}/{self.filename}", "w", encoding="utf-8")
         file.write(
             f"BookId,Name,TotalWorks,TotalWords,TotalDays,LevelTag,ImgLink,Books\n"
         )

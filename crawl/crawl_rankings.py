@@ -11,7 +11,7 @@ class CrawlRankings:
     }
     filename = "ranking.csv"
 
-    def __init__(self, path="./data/") -> None:
+    def __init__(self, path="./data") -> None:
         # Init path
         self.path = path
         os.makedirs(self.path, exist_ok=True)
@@ -24,7 +24,7 @@ class CrawlRankings:
         # Select the module content
         module_content = soup.select(".main-content-wrap > .rank-body > .rank-list")
 
-        file = open(self.path + self.filename, "w", encoding="utf-8")
+        file = open(f"{self.path}/{self.filename}", "w", encoding="utf-8")
         # Write the header
         file.write(f"Category,Rank,Title,BookId,Link\n")
 
