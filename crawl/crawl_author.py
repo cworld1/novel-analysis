@@ -16,9 +16,9 @@ class CrawlAuthor:
         self.path = path
         os.makedirs(self.path, exist_ok=True)
 
-    def crawl_data(self, author_id) -> str:
+    def crawl_data(self, from_id, callback) -> str:
         # Request the page
-        resp = requests.get(url=f"{self.url}/{author_id}", headers=self.headers)
+        resp = requests.get(url=f"{self.url}/{from_id}", headers=self.headers)
         soup = BeautifulSoup(resp.text, "html.parser")
 
         # Select the module content
@@ -38,8 +38,11 @@ class CrawlAuthor:
             "li"
         )
         books = ";".join([li["class"][0][4:] for li in books_li])
+        if callback is not None:
+            for id in books:
+                callback(id)
 
-        return f'{author_id},{name},{total_works},{total_words},{total_days},{level_tag},"{img_link}",{books}'
+        return f'{from_id},{name},{total_works},{total_words},{total_days},{level_tag},"{img_link}",{books}'
 
     def crawl(self, ids, callback=None):
         file = open(f"{self.path}/{self.filename}", "w", encoding="utf-8")
@@ -48,10 +51,8 @@ class CrawlAuthor:
         )
 
         for id in ids:
-            text = self.crawl_data(id)
+            text = self.crawl_data(id, callback)
             file.write("%s\n" % text)
-            if callback is not None:
-                callback(id)
 
         file.close()
 
