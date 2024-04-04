@@ -9,6 +9,8 @@ class AnalType:
 
     def __init__(self, path="./data") -> None:
         self.path = path
+
+        # Set font for different systems (to support Chinese)
         if platform.system() == "Darwin":
             # macOS
             plt.rcParams["font.family"] = "Arial Unicode MS"
@@ -41,7 +43,6 @@ class AnalType:
             list(type_popularity.keys()),
             list(type_popularity.values()),
             color=self.color,
-            color=self.color,
         )
         plt.title(context["title"])
         plt.xlabel(context["xlabel"])
@@ -52,21 +53,20 @@ class AnalType:
         # Show plot
         plt.show()
 
-    def draw_pie(self, type_counts: dict, custom_colors: list):
+    def draw_pie(self, type_counts: dict, context):
         # Data to plot
         labels = []
         sizes = []
         other_size = 0  # Size for 'Other' category
         total = sum(type_counts.values())
 
+        # Move lower data to 'Other' category
         for key, count in type_counts.items():
             if (count / total) * 100 >= 3:
                 labels.append(key)
                 sizes.append(count)
             else:
                 other_size += count
-
-        # If there is 'Other' data, add it
         if other_size > 0:
             labels.append("其他")
             sizes.append(other_size)
@@ -94,8 +94,8 @@ class AnalType:
             shadow=True,
             startangle=140,
         )
-        plt.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
-        plt.title("Composition of Novel Types")
+        plt.axis("equal")  # equal aspect ratio ensures that pie is drawn as a circle.
+        plt.title(context["title"])
         plt.tight_layout()
 
         # Show plot
