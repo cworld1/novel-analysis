@@ -3,12 +3,12 @@ import { To, useNavigate } from "react-router-dom";
 // Ant design
 import { Menu, MenuProps } from "antd";
 import {
-  UploadOutlined,
+  AppstoreOutlined,
+  CommentOutlined,
+  DashboardOutlined,
+  UsergroupAddOutlined,
   UserOutlined,
-  VideoCameraOutlined,
 } from "@ant-design/icons";
-// Assets
-import reactLogo from "../assets/react.svg";
 
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
@@ -19,45 +19,38 @@ const Sidebar: React.FC = () => {
   const items: MenuProps["items"] = [
     {
       key: "1",
-      icon: <UserOutlined />,
-      label: "Home",
-      onClick: () => handleClick("/"),
+      icon: <DashboardOutlined />,
+      label: "Dashboard",
+      onClick: () => handleClick("/board"),
     },
     { type: "divider" },
     {
       key: "2",
-      icon: <VideoCameraOutlined />,
-      label: "Settings",
-      onClick: () => handleClick("/settings"),
+      icon: <AppstoreOutlined />,
+      label: "Type",
+      onClick: () => handleClick("/board/type"),
     },
     {
       key: "3",
-      icon: <UploadOutlined />,
-      label: "About",
-      onClick: () => handleClick("/about"),
+      icon: <UserOutlined />,
+      label: "Author",
+      onClick: () => handleClick("/board/author"),
+    },
+    {
+      key: "4",
+      icon: <CommentOutlined />,
+      label: "Comment",
+      onClick: () => handleClick("/board/comment"),
+    },
+    {
+      key: "5",
+      icon: <UsergroupAddOutlined />,
+      label: "Character",
+      onClick: () => handleClick("/board/character"),
     },
   ];
 
-  return (
-    <>
-      <div
-        className="header"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          padding: "18px 19px 11px",
-        }}
-      >
-        <div className="logo">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </div>
-        <span className="title" style={{ marginLeft: "12px" }}>
-          React
-        </span>
-      </div>
-      <Menu mode="inline" defaultSelectedKeys={["1"]} items={items} />
-    </>
-  );
+  return <Menu defaultSelectedKeys={["1"]} items={items} />;
 };
 
 export default Sidebar;

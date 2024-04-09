@@ -1,71 +1,50 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 // Ant design
-import { Layout, Button, theme, Breadcrumb } from "antd";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { FloatButton, Layout, theme } from "antd";
 // Components
-import HomePage from "./components/HomePage";
-import AboutPage from "./components/AboutPage";
-import SettingsPage from "./components/SettingsPage";
-import Sidebar from "./components/Sidebar";
+import TopAppBar from "./components/TopAppBar";
+import RouteContents from "./components/Routes";
+import { ReloadOutlined } from "@ant-design/icons";
 
-const { Header, Sider, Content, Footer } = Layout;
+const { Header } = Layout;
 
 const App: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer },
   } = theme.useToken();
 
   return (
     <Router>
       <Layout>
-        {/* Sidebar */}
-        <Sider
-          theme="light"
-          trigger={null}
-          collapsible
-          collapsed={collapsed}
-          onCollapse={(value) => setCollapsed(value)}
+        {/* Header */}
+        <Header
+          style={{
+            display: "flex",
+            alignItems: "center",
+            background: colorBgContainer,
+            padding: "0 24px",
+            position: "fixed",
+            left: 0,
+            right: 0,
+            zIndex: 1,
+          }}
         >
-          <Sidebar />
-        </Sider>
-        <Layout className="site-layout">
-          {/* Header */}
-          <Header style={{ padding: 0, background: colorBgContainer }}>
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-              }}
-            />
-          </Header>
-          <Content style={{ margin: "0 16px" }}>
-            {/* Breadcrumb */}
-            <Breadcrumb style={{ margin: "16px 0" }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            {/* Contents */}
-            <div
-              style={{
-                padding: 24,
-                minHeight: 360,
-                background: colorBgContainer,
-                borderRadius: borderRadiusLG,
-              }}
-            >
-              <Routes>
-                <Route path="/" element={<HomePage />} />
+          <TopAppBar />
+        </Header>
         {/* Contents */}
         <div style={{ marginTop: 64 }}>
           <RouteContents />
-            </div>
+        </div>
       </Layout>
+      <FloatButton.Group shape="circle" style={{ right: 24 }}>
+        <FloatButton.BackTop visibilityHeight={0} />
+        <FloatButton
+          icon={<ReloadOutlined />}
+          type="primary"
+          tooltip={<div>Reload</div>}
+        />
+      </FloatButton.Group>
     </Router>
   );
 };
