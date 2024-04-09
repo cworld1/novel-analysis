@@ -22,7 +22,7 @@ git clone https://github.com/cworld1/novel-analysis.git
 cd novel-analysis
 ```
 
-### Crawl & Analysis
+### Crawl & Analysis Server
 
 Environment requirements:
 
@@ -43,7 +43,7 @@ Environment requirements:
    - [conda](https://docs.conda.io/en/latest/)
    - [uv](https://github.com/astral-sh/uv/)
 
-3. Install the dependencies:
+2. Install the dependencies:
 
    ```shell
    pip install -r requirements.txt
@@ -51,22 +51,62 @@ Environment requirements:
 
 3. Run crawler script
 
-    ```shell
-    python ./crawl/main.py
-    ```
+   ```shell
+   python ./crawl/main.py
+   ```
 
 4. Run the analysis script
 
-    ```shell
-    python ./anal/anal_type.py
-    ```
+   ```shell
+   python ./anal/anal_api.py
+   # or run: python -m flask --app ./anal/anal_api.py run
+   ```
 
 ### Display Dashboard
 
 Environment requirements:
 
-- [Nodejs]()
+- [Nodejs](https://nodejs.org/): 18.0.0+
+- Corepack: 0.10.0+
 
+> If your Node.js version is lower than 16.13.0，Please install [corepack](https://nodejs.org/api/corepack.html) first.
+>
+> ```shell
+> npm install -g corepack
+> ```
+>
+> If you are macOS user and use brew to install Node.js, you can use the following command to install corepack:
+>
+> ```shell
+> brew install corepack
+> ```
+
+1. Enable pnpm:
+
+   ```shell
+   corepack enable
+   corepack prepare pnpm@latest --activate
+   ```
+
+2. Install dependencies:
+
+   ```shell
+   pnpm install
+   ```
+
+3. Start the development server:
+
+   ```shell
+   pnpm dev
+   ```
+
+   This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+
+4. Some useful commands:
+
+   - `pnpm build`: Bundles the app into static files for production.
+   - `pnpm lint`: Lints the project for potential errors.
+   - `pnpm preview`: Preview the production build locally.
 
 ## Contributions
 
@@ -86,18 +126,17 @@ If you are developing a production application, we recommend updating the config
 export default {
   // other rules...
   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
+    ecmaVersion: "latest",
+    sourceType: "module",
+    project: ["./tsconfig.json", "./tsconfig.node.json"],
     tsconfigRootDir: __dirname,
   },
-}
+};
 ```
 
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-
 
 ## Thanks
 
