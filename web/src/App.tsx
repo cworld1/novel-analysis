@@ -61,16 +61,10 @@ const App: React.FC = () => {
             >
               <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/settings" element={<SettingsPage />} />
-              </Routes>
+        {/* Contents */}
+        <div style={{ marginTop: 64 }}>
+          <RouteContents />
             </div>
-          </Content>
-          {/* Footer */}
-          <Footer style={{ textAlign: "center" }}>
-            Ant Design ©{new Date().getFullYear()} Created by Ant UED
-          </Footer>
-        </Layout>
       </Layout>
     </Router>
   );
