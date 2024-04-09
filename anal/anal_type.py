@@ -1,6 +1,6 @@
 import csv, platform
+import matplotlib
 import matplotlib.pyplot as plt
-from matplotlib import colormaps
 
 
 class AnalType:
@@ -8,8 +8,10 @@ class AnalType:
     color = "skyblue"
     colors = "GnBu"
 
-    def __init__(self, path="./data") -> None:
+    def __init__(self, path="./data", interaction=True) -> None:
         self.path = path
+        if not interaction:
+            matplotlib.use("Agg")
 
         # Set font for different systems (to support Chinese)
         if platform.system() == "Darwin":
@@ -28,7 +30,7 @@ class AnalType:
             return int(float(popularity.replace("万", "")) * 10000)
         return int(popularity)
 
-    def draw_bar(self, type_counts: dict, type_popularity: dict, context):
+    def draw_bar(self, type_counts: dict, type_popularity: dict, context, callback):
         # Calculate mean popularity
         for key in type_popularity:
             type_popularity[key] /= type_counts[key]
@@ -51,10 +53,11 @@ class AnalType:
         plt.xticks(rotation=45)
         plt.tight_layout()
 
-        # Show plot
-        plt.show()
+        # Do with the plot
+        callback()
+        plt.close()
 
-    def draw_pie(self, type_counts: dict, context):
+    def draw_pie(self, type_counts: dict, context, callback):
         # Data to plot
         labels = []
         sizes = []
@@ -78,7 +81,7 @@ class AnalType:
         ]  # Only explode the largest slice
 
         # Plot
-        colormap = colormaps[self.colors].resampled(len(sizes))
+        colormap = matplotlib.colormaps[self.colors].resampled(len(sizes))
         plt.figure(figsize=(8, 8))
         plt.pie(
             sizes,
@@ -93,10 +96,11 @@ class AnalType:
         plt.title(context["title"])
         plt.tight_layout()
 
-        # Show plot
-        plt.show()
+        # Do with the plot
+        callback()
+        plt.close()
 
-    def anal(self, shape="bar"):
+    def anal(self, shape="bar", callback=lambda: plt.show()):
         type_popularity = {}
         type_counts = {}
 
@@ -125,14 +129,14 @@ class AnalType:
                 "xlabel": "Type",
                 "ylabel": "Mean Popularity",
             }
-            self.draw_bar(type_counts, type_popularity, context)
+            self.draw_bar(type_counts, type_popularity, context, callback)
 
         elif shape == "pie":
             # Draw pie plot
             context = {"title": "Composition of Novel Types"}
-            self.draw_pie(type_counts, context)
+            self.draw_pie(type_counts, context, callback)
 
 
 # Test
-anal_type = AnalType()
-anal_type.anal(shape="pie")
+# anal_type = AnalType()
+# anal_type.anal(shape="pie", callback=lambda: plt.show())
