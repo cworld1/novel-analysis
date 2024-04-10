@@ -1,96 +1,23 @@
 import csv
 
 # Plot
-import matplotlib
-import matplotlib.pyplot as plt
+# import matplotlib
+# import matplotlib.pyplot as plt
+from pyecharts import options as opts
+from pyecharts.charts import Bar, Pie
 
 from anal_helper import convert_wan, set_font
 
 
 class AnalType:
     file = "books.csv"
-    color = "skyblue"
-    colors = "GnBu"
 
-    def __init__(self, path="./data", interaction=True) -> None:
+    def __init__(self, path="./data") -> None:
         self.path = path
-        # Hide ui if needed
-        if not interaction:
-            matplotlib.use("Agg")
         # Set font for different systems (to support Chinese)
         set_font()
 
-    def draw_bar(self, type_counts: dict, type_popularity: dict, context, callback):
-        # Calculate mean popularity
-        for key in type_popularity:
-            type_popularity[key] /= type_counts[key]
-        type_popularity = dict(
-            sorted(type_popularity.items(), key=lambda x: x[1], reverse=True)
-        )
-        # for key, value in type_popularity:
-        #     print(key, value)
-
-        # Create bar plot
-        plt.figure(figsize=(10, 6))
-        plt.bar(
-            list(type_popularity.keys()),
-            list(type_popularity.values()),
-            color=self.color,
-        )
-        plt.title(context["title"])
-        plt.xlabel(context["xlabel"])
-        plt.ylabel(context["ylabel"])
-        plt.xticks(rotation=45)
-        plt.tight_layout()
-
-        # Do with the plot
-        callback()
-        plt.close()
-
-    def draw_pie(self, type_counts: dict, context, callback):
-        # Data to plot
-        labels = []
-        sizes = []
-        other_size = 0  # Size for 'Other' category
-        total = sum(type_counts.values())
-
-        # Move lower data to 'Other' category
-        for key, count in type_counts.items():
-            if (count / total) * 100 >= 3:
-                labels.append(key)
-                sizes.append(count)
-            else:
-                other_size += count
-        if other_size > 0:
-            labels.append("其他")
-            sizes.append(other_size)
-
-        # Highlight the biggest slice
-        explode = [
-            0.1 if i == max(sizes) else 0 for i in sizes
-        ]  # Only explode the largest slice
-
-        # Plot
-        colormap = matplotlib.colormaps[self.colors].resampled(len(sizes))
-        plt.figure(figsize=(8, 8))
-        plt.pie(
-            sizes,
-            explode=explode,
-            labels=labels,
-            colors=colormap(range(len(sizes))),
-            autopct=lambda p: "{:.1f}%".format(p) if p >= 3 else "",
-            shadow=True,
-            startangle=140,
-        )
-        plt.axis("equal")  # equal aspect ratio ensures that pie is drawn as a circle.
-        plt.title(context["title"])
-        plt.tight_layout()
-
-        # Do with the plot
-        callback()
-        plt.close()
-
-    def anal(self, shape="bar", callback=lambda: plt.show()):
+    def anal(self, shape="bar", callback=None):
         type_popularity = {}
         type_counts = {}
 
@@ -114,19 +41,80 @@ class AnalType:
 
         if shape == "bar":
             # Draw bar plot
-            context = {
-                "title": "Mean Popularity by Type",
-                "xlabel": "Type",
-                "ylabel": "Mean Popularity",
-            }
-            self.draw_bar(type_counts, type_popularity, context, callback)
+            context = {"title": "Mean Popularity by Type"}
+            draw = self.draw_bar(type_counts, type_popularity, context)
 
         elif shape == "pie":
             # Draw pie plot
             context = {"title": "Composition of Novel Types"}
-            self.draw_pie(type_counts, context, callback)
+            draw = self.draw_pie(type_counts, context)
+
+        return draw
+
+    def draw_bar(self, type_counts: dict, type_popularity: dict, context):
+        # Calculate mean popularity
+        for key in type_popularity:
+            type_popularity[key] /= type_counts[key]
+        type_popularity = dict(
+            sorted(type_popularity.items(), key=lambda x: x[1], reverse=True)
+        )
+        # for key, value in type_popularity:
+        #     print(key, value)
+
+        # Create bar plot
+        bar = (
+            Bar()
+            .add_xaxis(list(type_popularity.keys()))
+            .add_yaxis("", list(type_popularity.values()))
+            .set_global_opts(
+                title_opts=opts.TitleOpts(title=context["title"]),
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=45)),
+            )
+        )
+        return bar
+
+    def draw_pie(self, type_counts: dict, context):
+        # Data to plot
+        labels = []
+        sizes = []
+        other_size = 0  # Size for 'Other' category
+        total = sum(type_counts.values())
+
+        # Move lower data to 'Other' category
+        for key, count in type_counts.items():
+            if (count / total) * 100 >= 3:
+                labels.append(key)
+                sizes.append(count)
+            else:
+                other_size += count
+        if other_size > 0:
+            labels.append("其他")
+            sizes.append(other_size)
+
+        # Highlight the biggest slice
+        # explode = [
+        #     0.1 if i == max(sizes) else 0 for i in sizes
+        # ]  # Only explode the largest slice
+
+        # Plot
+        pie = (
+            Pie()
+            .add(
+                "",
+                [list(z) for z in zip(labels, sizes)],
+                radius=["40%", "75%"],
+            )
+            .set_global_opts(
+                title_opts=opts.TitleOpts(title=context["title"]),
+                legend_opts=opts.LegendOpts(
+                    orient="vertical", pos_top="15%", pos_left="2%"
+                ),
+            )
+        )
+
+        return pie
 
 
 # Test
-# anal_type = AnalType()
-# anal_type.anal(shape="pie", callback=lambda: plt.show())
+anal_type = AnalType()
+anal_type.anal(shape="pie").render()

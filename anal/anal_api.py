@@ -1,18 +1,9 @@
-from io import BytesIO
-from flask import Flask, send_file, request
-from matplotlib import pyplot as plt
+from flask import Flask, request
 from anal_type import AnalType
 
 
-anal_type = AnalType(interaction=False)
+anal_type = AnalType()
 app = Flask(__name__)
-
-
-def save_figure_to_buf(function, shape=None) -> BytesIO:
-    buf = BytesIO()
-    function(shape, callback=lambda: plt.savefig(buf, format="png"))
-    buf.seek(0)
-    return buf
 
 
 @app.after_request
@@ -25,8 +16,15 @@ def add_cors_headers(response):
 @app.route("/plot/type")
 def plot_type():
     shape = request.args.get("shape")
-    buf = save_figure_to_buf(anal_type.anal, shape)
-    return send_file(buf, mimetype="image/png")
+    draw = anal_type.anal(shape=shape)
+    return draw.dump_options_with_quotes()
+
+
+# @app.route("/plot/author")
+# def plot_type():
+#     shape = request.args.get("shape")
+#     draw = anal_type.anal(shape=shape)
+#     return draw.dump_options_with_quotes()
 
 
 if __name__ == "__main__":

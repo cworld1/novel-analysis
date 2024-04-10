@@ -1,33 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
+import * as echarts from "echarts";
 
 const getImage = async (shape: string) => {
-  const response = await axios.get(
-    `http://127.0.0.1:5000/plot/type?shape=${shape}`,
-    {
-      responseType: "arraybuffer",
-    }
-  );
-
-  const base64 = btoa(
-    new Uint8Array(response.data).reduce(
-      (data, byte) => data + String.fromCharCode(byte),
-      ""
-    )
-  );
-  return "data:;base64," + base64;
+  var chart = echarts.init(document.getElementById(shape), "white", {
+    renderer: "canvas",
+  });
+  axios
+    .get(`http://127.0.0.1:5000/plot/type?shape=${shape}`)
+    .then(function (result) {
+      chart.setOption(result.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 };
 
 const BoardTypePage: React.FC = () => {
-  const [barImage, setBarImage] = useState("");
-  const [pieImage, setPieImage] = useState("");
-
   useEffect(() => {
     const fetchData = async () => {
-      const barImg = await getImage("bar");
-      const pieImg = await getImage("pie");
-      setBarImage(barImg);
-      setPieImage(pieImg);
+      await getImage("bar");
+      await getImage("pie");
     };
 
     fetchData();
@@ -36,8 +29,8 @@ const BoardTypePage: React.FC = () => {
   return (
     <>
       <h2>Type of novel</h2>
-      {barImage && <img src={barImage} alt="Novel type bar" />}
-      {pieImage && <img src={pieImage} alt="Novel type pie" />}
+      <div id="bar" style={{ width: 1000, height: 600 }} />
+      <div id="pie" style={{ width: 1000, height: 600 }} />
     </>
   );
 };
