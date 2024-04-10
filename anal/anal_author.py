@@ -51,7 +51,7 @@ class AnalAuthor:
         # print(authors_books)
         authors_genre_pop = self.anal_authors_genre_pop(authors_books)
         # print(authors_genre_pop)
-        self.draw_genre_pop_wordcount_relationship(pd.DataFrame(authors_genre_pop))
+        self.draw_genre_pop_wordcount_rs(pd.DataFrame(authors_genre_pop))
 
     def anal_authors_genre_pop(self, authors_books):
         """
@@ -99,7 +99,7 @@ class AnalAuthor:
             analysis_data.append(author_data)
         return analysis_data
 
-    def draw_genre_pop_wordcount_relationship(self, analysis_data):
+    def draw_genre_pop_wordcount_rs(self, analysis_data):
         # Use OLS model for ANOVA
         model = ols(
             "AveragePopularity ~ C(PreferredGenreStr)", data=analysis_data
