@@ -7,7 +7,8 @@ rank_book_folder = "rank_book_info"  # ranks' book info stored folder
 author_book_folder = "author_book_info"  # the authors' book info stored folder
 forceUpdate = False  # whether to force update the data
 
-if __name__ == "__main__":
+
+def crawl():
     rankingsCrawler = CrawlRankings(path)
     infoBookCrawler = CrawlInfo(path, rank_book_folder, forceUpdate=forceUpdate)
     infoAuthorCrawler = CrawlInfo(path, author_book_folder, forceUpdate=forceUpdate)
@@ -22,3 +23,7 @@ if __name__ == "__main__":
     )
     # Crawl the author info and the author's books
     authorCrawler.crawl(ids, lambda book: infoAuthorCrawler.crawl(book)),
+
+
+if __name__ == "__main__":
+    crawl()

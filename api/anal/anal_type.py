@@ -6,7 +6,7 @@ import csv
 from pyecharts import options as opts
 from pyecharts.charts import Bar, Pie
 
-from anal_helper import convert_wan, set_font
+from api.api_helper import convert_wan
 
 
 class AnalType:
@@ -14,10 +14,8 @@ class AnalType:
 
     def __init__(self, path="./data") -> None:
         self.path = path
-        # Set font for different systems (to support Chinese)
-        set_font()
 
-    def anal(self, shape="bar", callback=None):
+    def anal(self, shape="bar"):
         type_popularity = {}
         type_counts = {}
 
@@ -41,7 +39,11 @@ class AnalType:
 
         if shape == "bar":
             # Draw bar plot
-            context = {"title": "Mean Popularity by Type"}
+            context = {
+                "title": "Mean Popularity by Type",
+                "xlabel": "Type",
+                "ylabel": "Mean Popularity",
+            }
             draw = self.draw_bar(type_counts, type_popularity, context)
 
         elif shape == "pie":
@@ -65,10 +67,11 @@ class AnalType:
         bar = (
             Bar()
             .add_xaxis(list(type_popularity.keys()))
-            .add_yaxis("", list(type_popularity.values()))
+            .add_yaxis(context["ylabel"], list(type_popularity.values()))
             .set_global_opts(
                 title_opts=opts.TitleOpts(title=context["title"]),
                 xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=45)),
+                datazoom_opts=opts.DataZoomOpts(),
             )
         )
         return bar
@@ -117,4 +120,4 @@ class AnalType:
 
 # Test
 anal_type = AnalType()
-anal_type.anal(shape="pie").render()
+anal_type.anal(shape="bar").render()
