@@ -10,7 +10,7 @@ from statsmodels.formula.api import ols
 import matplotlib.pyplot as plt
 import matplotlib
 
-from api.api_helper import convert_wan, set_font
+from anal_helper import convert_wan, set_font
 
 
 class AnalAuthor:

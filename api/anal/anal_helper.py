@@ -1,6 +1,3 @@
-# import platform
-
-
 # Function to convert '万' to number
 def convert_wan(count) -> int:
     if "万" in count:
@@ -8,6 +5,7 @@ def convert_wan(count) -> int:
     return int(count)
 
 
+# import platform
 # def set_font():
 #     # Set font for different systems (to support Chinese)
 #     if platform.system() == "Darwin":

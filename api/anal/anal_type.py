@@ -1,19 +1,17 @@
 import csv
 
 # Plot
-# import matplotlib
-# import matplotlib.pyplot as plt
 from pyecharts import options as opts
 from pyecharts.charts import Bar, Pie
 
-from api.api_helper import convert_wan
+from anal_helper import convert_wan
 
 
 class AnalType:
-    file = "books.csv"
 
-    def __init__(self, path="./data") -> None:
+    def __init__(self, path="./data", file="books.csv") -> None:
         self.path = path
+        self.file = file
 
     def anal(self, shape="bar"):
         type_popularity = {}
