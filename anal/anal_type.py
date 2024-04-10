@@ -1,6 +1,10 @@
-import csv, platform
+import csv
+
+# Plot
 import matplotlib
 import matplotlib.pyplot as plt
+
+from anal_helper import convert_wan, set_font
 
 
 class AnalType:
@@ -10,25 +14,11 @@ class AnalType:
 
     def __init__(self, path="./data", interaction=True) -> None:
         self.path = path
+        # Hide ui if needed
         if not interaction:
             matplotlib.use("Agg")
-
         # Set font for different systems (to support Chinese)
-        if platform.system() == "Darwin":
-            # macOS
-            plt.rcParams["font.family"] = "Arial Unicode MS"
-        elif platform.system() == "Windows":
-            # Windows
-            plt.rcParams["font.family"] = "SimHei"
-        else:
-            # Other system
-            plt.rcParams["font.family"] = "Arial"
-
-    # Function to convert '万' to number
-    def convert_wan(self, popularity) -> int:
-        if "万" in popularity:
-            return int(float(popularity.replace("万", "")) * 10000)
-        return int(popularity)
+        set_font()
 
     def draw_bar(self, type_counts: dict, type_popularity: dict, context, callback):
         # Calculate mean popularity
@@ -109,7 +99,7 @@ class AnalType:
         with open(f"{self.path}/{self.file}", "r", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
-                pop = self.convert_wan(row["Popularity"])
+                pop = convert_wan(row["Popularity"])
                 # row["Popularity"] = pop
                 # data.append(row)
 
