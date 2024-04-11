@@ -1,5 +1,8 @@
 import React from "react";
+// Antd
 import { Breadcrumb, Layout, theme } from "antd";
+// Components
+import { routeItems } from "../components/Routes";
 
 const { Content, Footer } = Layout;
 
@@ -16,11 +19,7 @@ const CommonPage: React.FC<CommonPageProps> = ({ PageContent }) => {
     <Layout className="site-layout">
       {/* Content */}
       <Layout style={{ padding: "0 48px" }}>
-        <Breadcrumb style={{ margin: "16px 0" }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb>
+        <Breadcrumb style={{ margin: "16px 0" }} items={routeItems()} />
         <Content
           style={{
             background: colorBgContainer,

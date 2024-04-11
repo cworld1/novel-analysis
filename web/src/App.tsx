@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { FloatButton, Layout, theme } from "antd";
 // Components
 import TopAppBar from "./components/TopAppBar";
-import RouteContents from "./components/Routes";
+import { RouteContent } from "./components/Routes";
 import { ReloadOutlined } from "@ant-design/icons";
 
 const { Header } = Layout;
@@ -34,7 +34,7 @@ const App: React.FC = () => {
         </Header>
         {/* Contents */}
         <div style={{ marginTop: 64 }}>
-          <RouteContents />
+          <RouteContent />
         </div>
       </Layout>
       <FloatButton.Group shape="circle" style={{ right: 24 }}>

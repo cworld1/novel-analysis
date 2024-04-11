@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
+// Antd
 import { Breadcrumb, Layout, theme } from "antd";
 // Components
 import Sidebar from "../components/Sidebar";
-import { Outlet } from "react-router-dom";
+import { routeItems } from "../components/Routes";
 
 const { Sider, Content, Footer } = Layout;
 
@@ -40,10 +42,10 @@ const BoardPage: React.FC = () => {
         }}
       >
         {/* Breadcrumb */}
-        <Breadcrumb style={{ margin: "16px 0" }}>
-          <Breadcrumb.Item>User</Breadcrumb.Item>
-          <Breadcrumb.Item>Bill</Breadcrumb.Item>
-        </Breadcrumb>
+        <Breadcrumb
+          style={{ margin: "16px 0" }}
+          items={routeItems()}
+        ></Breadcrumb>
         <Content
           style={{
             background: colorBgContainer,
