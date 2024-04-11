@@ -15,7 +15,10 @@ const CommonTemplate: React.FC<CommonTemplateProps> = ({ PageContent }) => {
   } = theme.useToken();
 
   return (
-    <Layout className="site-layout">
+    <Layout
+      className="site-layout"
+      style={{ maxWidth: 1200, margin: "0 auto" }}
+    >
       {/* Content */}
       <Layout style={{ padding: "0 48px" }}>
         <Breadcrumb style={{ margin: "16px 0" }} items={routeItems()} />
