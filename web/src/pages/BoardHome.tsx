@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-// Ant design
+// Antd
 import { Card, Carousel, Col, Row } from "antd";
 const { Meta } = Card;
 
@@ -11,7 +11,7 @@ interface BookInfo {
 
 const BoardHomePage: React.FC = () => {
   const [books, setBooks] = useState<BookInfo[] | null>(null);
-  const bookCount = 3;
+  const bookCount = 4;
 
   useEffect(() => {
     const url = `http://127.0.0.1:5000/fetch/novel?choose=random&count=${bookCount}`;
@@ -37,7 +37,7 @@ const BoardHomePage: React.FC = () => {
       <Row gutter={16}>
         {books &&
           books.map((book, index) => (
-            <Col span={8} key={index}>
+            <Col xs={24} md={12} key={index}>
               <Card
                 hoverable
                 style={{ width: 240 }}

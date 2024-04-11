@@ -1,4 +1,8 @@
 import React, { useEffect } from "react";
+// Antd
+import { Typography } from "antd";
+const { Title } = Typography;
+// Echarts
 import axios from "axios";
 import * as echarts from "echarts";
 
@@ -28,7 +32,7 @@ const BoardTypePage: React.FC = () => {
 
   return (
     <>
-      <h2>Type of novel</h2>
+      <Title>Type of novel</Title>
       <div id="bar" style={{ width: 1000, height: 600 }} />
       <div id="pie" style={{ width: 1000, height: 600 }} />
     </>

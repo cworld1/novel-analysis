@@ -1,13 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-// Ant design
+// Antd
 import { FloatButton, Layout, theme } from "antd";
+const { Header } = Layout;
 // Components
 import TopAppBar from "./components/TopAppBar";
 import { RouteContent } from "./components/Routes";
 import { ReloadOutlined } from "@ant-design/icons";
-
-const { Header } = Layout;
 
 const App: React.FC = () => {
   const {
