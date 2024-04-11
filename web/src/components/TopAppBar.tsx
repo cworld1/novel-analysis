@@ -1,7 +1,8 @@
 import React from "react";
 import { To, useNavigate, useLocation } from "react-router-dom";
 // Antd
-import { Flex, Menu, MenuProps } from "antd";
+import { Flex, Menu, MenuProps, theme, Layout } from "antd";
+const { Header } = Layout;
 // Assets
 import reactLogo from "../assets/react.svg";
 
@@ -11,6 +12,9 @@ const TopAppBar: React.FC = () => {
   const handleClick = (route: To) => {
     navigate(route);
   };
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
 
   const routeToKey: Record<string, string> = {
     "/": "1",
@@ -42,15 +46,19 @@ const TopAppBar: React.FC = () => {
   ];
 
   return (
-    <div
+    <Header
       style={{
         display: "flex",
         alignItems: "center",
-        padding: 10,
-        width: "100%",
+        background: colorBgContainer,
+        padding: "0 34px",
+        position: "fixed",
+        left: 0,
+        right: 0,
+        zIndex: 1,
       }}
     >
-      <Flex className="logo" style={{ width: 200 - 24 - 10 }}>
+      <Flex className="logo" style={{ width: 200 - 34 }}>
         <img src={reactLogo} className="logo react" alt="React logo" />
         <span className="title" style={{ marginLeft: "10px" }}>
           React
@@ -63,7 +71,7 @@ const TopAppBar: React.FC = () => {
         items={items}
         style={{ flex: 1, minWidth: 0 }}
       ></Menu>
-    </div>
+    </Header>
   );
 };
 
