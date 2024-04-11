@@ -59,7 +59,11 @@ const Sidebar: React.FC = () => {
   ];
 
   return (
-    <Menu defaultSelectedKeys={[routeToKey[location.pathname]]} items={items} />
+    <Menu
+      selectedKeys={[routeToKey[location.pathname]]}
+      defaultSelectedKeys={[routeToKey[location.pathname]]}
+      items={items}
+    />
   );
 };
 
