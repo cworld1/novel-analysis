@@ -1,62 +1,38 @@
 import csv, json
-
-# Data processing
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
-
-# Plot
+from pyecharts.charts import Bar, Scatter
+from pyecharts import options as opts
 import matplotlib.pyplot as plt
-import matplotlib
-
-from anal_helper import convert_wan, set_font
-
+from anal_helper import set_font
 
 class AnalAuthor:
-    file = "authors.csv"
-
-    def __init__(self, path="./data", interaction=True) -> None:
+    def __init__(self, path="./data", interaction=True):
         self.path = path
-        # Hide ui if needed
         if not interaction:
+            import matplotlib
             matplotlib.use("Agg")
-        # Set font for different systems (to support Chinese)
         set_font()
 
-    def anal(self, callback=lambda: plt.show()):
-        # data = []
+    def anal(self):
         authors_books = {}
-        with open("./data/authors.csv", "r", encoding="utf-8") as file:
+        with open(f"{self.path}/authors.csv", "r", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
-                if None in row.values() or "" in row.values():  # 判断是否存在空数据
+                if None in row.values() or "" in row.values():
                     continue
+                primary_book_path = f"{self.path}/rank_book_info/{row['BookId']}.json"
+                additional_books_paths = [f"{self.path}/author_book_info/{bookId}.json" for bookId in row["Books"].split(";")]
+                authors_books[row["Name"]] = [primary_book_path] + additional_books_paths
 
-                primary_book_path = f"./data/rank_book_info/{row['BookId']}.json"
-                additional_books_paths = [
-                    f"./data/author_book_info/{bookId}.json"
-                    for bookId in row["Books"].split(";")
-                ]
-                all_books_paths = [primary_book_path] + additional_books_paths
-                authors_books[row["Name"]] = all_books_paths
-
-                # words = convert_wan(row["TotalWords"])
-                # row["TotalWords"] = words
-                # row["BooksCount"] = len(row["Books"].split(";"))
-
-                # data.append(row)
-
-        # print(data)
-        # print(authors_books)
-        authors_genre_pop = self.anal_authors_genre_pop(authors_books)
-        # print(authors_genre_pop)
-        self.draw_genre_pop_wordcount_rs(pd.DataFrame(authors_genre_pop))
+        analysis_data = self.anal_authors_genre_pop(authors_books)
+        analysis_df = pd.DataFrame(analysis_data)
+        self.draw_genre_popularity_bar(analysis_df)
+        self.draw_wordcount_popularity_scatter(analysis_df)
 
     def anal_authors_genre_pop(self, authors_books):
-        """
-        分析每个作者的创作类型偏好，并存储结果到类属性中。
-        """
         analysis_data = []
         for author, books_paths in authors_books.items():
             total_words = 0
@@ -68,81 +44,45 @@ class AnalAuthor:
                     with open(book_path, "r", encoding="utf-8") as file:
                         data = json.load(file)
                         book_info = data["bookInfo"]
-                        # 累计字数
                         total_words += book_info.get("wordsCount", 0)
-                        # 累加收藏数
                         total_collect_count += book_info.get("collectCount", 0)
                         books_count += 1
-
-                        genre_key = (
-                            book_info["categoryName"],
-                            book_info["subCategoryName"],
-                        )
-                        # 分类
+                        genre_key = (book_info["categoryName"], book_info["subCategoryName"])
                         genre_counts[genre_key] = genre_counts.get(genre_key, 0) + 1
                 except FileNotFoundError:
                     print(f"File not found: {book_path}")
                     continue
-            preferred_genre = (
-                max(genre_counts, key=genre_counts.get) if genre_counts else None
-            )
-            author_data = {
+            preferred_genre = max(genre_counts, key=genre_counts.get) if genre_counts else None
+            analysis_data.append({
                 "Name": author,
                 "AverageWords": total_words / books_count if books_count else 0,
-                "PreferredGenreStr": (
-                    ", ".join(preferred_genre) if preferred_genre else "N/A"
-                ),
-                "AveragePopularity": (
-                    total_collect_count / books_count if books_count else 0
-                ),
-            }
-            analysis_data.append(author_data)
+                "PreferredGenreStr": ", ".join(preferred_genre) if preferred_genre else "N/A",
+                "AveragePopularity": total_collect_count / books_count if books_count else 0,
+            })
         return analysis_data
 
-    def draw_genre_pop_wordcount_rs(self, analysis_data):
-        # Use OLS model for ANOVA
-        model = ols(
-            "AveragePopularity ~ C(PreferredGenreStr)", data=analysis_data
-        ).fit()
-        anova_results = sm.stats.anova_lm(model, typ=2)
-        print("ANOVA results for genre and popularity:\n", anova_results)
-
-        avg_pop_by_genre = analysis_data.groupby("PreferredGenreStr")[
-            "AveragePopularity"
-        ].mean()
-
-        plt.figure(figsize=(12, 6))
-        plt.barh(avg_pop_by_genre.index, avg_pop_by_genre)
-
-        plt.title("Average Popularity by Genre")
-        plt.xlabel("Average Collect Count")
-        plt.ylabel("Genre")
-        plt.tight_layout()
-        plt.show()
-
-        correlation = np.corrcoef(
-            analysis_data["AverageWords"],
-            analysis_data["AveragePopularity"],
-        )[0, 1]
-        print(
-            "Correlation coefficient between word count and popularity: ", correlation
-        )
-
-        plt.figure(figsize=(10, 6))
-        plt.scatter(analysis_data["AverageWords"], analysis_data["AveragePopularity"])
-        plt.title("Relationship between Word Count and Popularity")
-        plt.xlabel("Word Count")
-        plt.ylabel("Collect Count")
-        plt.tight_layout()
-        plt.show()
-
-
-# worknum_authors=df.groupby('Name')['Books'].sum()
-# wordnum_authors=df.groupby('Name')['TotalWords'].median()
-# createday_authors=df.groupby('Name')['TotalDays'].median()
-# df1=analyze_authors_genre_and_popularity(df,authors_books)
-# df2=analyze_authors_genre_preferences(authors_books)
-# visualize_genre_popularity_wordcount_relationship(df1)
+    def draw_genre_popularity_bar(self, analysis_data):
+        avg_pop_by_genre = analysis_data.groupby("PreferredGenreStr")["AveragePopularity"].mean().sort_values(ascending=False)
+        bar = (Bar()
+               .add_xaxis(list(avg_pop_by_genre.index))
+               .add_yaxis("Average Popularity", list(avg_pop_by_genre.values))
+               .set_global_opts(title_opts=opts.TitleOpts(title="Average Popularity by Genre"),
+                                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=-45)),
+                                yaxis_opts=opts.AxisOpts(name="Average Collect Count")))
+        bar.render("genre_popularity_bar.html")
+    
+    def draw_wordcount_popularity_scatter(self, analysis_data):
+        word_counts = analysis_data["AverageWords"].tolist()
+        popularities = analysis_data["AveragePopularity"].tolist()
+        correlation = np.corrcoef(word_counts, popularities)[0, 1]
+        print("Correlation coefficient between word count and popularity:", correlation)
+        scatter = (Scatter()
+                   .add_xaxis(word_counts)
+                   .add_yaxis("Popularity", popularities)
+                   .set_global_opts(title_opts=opts.TitleOpts(title="Relationship between Word Count and Popularity"),
+                                    xaxis_opts=opts.AxisOpts(name="Word Count"),
+                                    yaxis_opts=opts.AxisOpts(name="Average Collect Count")))
+        scatter.render("wordcount_popularity_scatter.html")
 
 # Test
 anal_author = AnalAuthor()
