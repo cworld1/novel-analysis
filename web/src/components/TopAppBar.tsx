@@ -1,16 +1,23 @@
 import React from "react";
+import { To, useNavigate, useLocation } from "react-router-dom";
 // Ant design
 import { Menu, MenuProps } from "antd";
 // Assets
 import reactLogo from "../assets/react.svg";
-import { To, useNavigate } from "react-router-dom";
 
 const TopAppBar: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const handleClick = (route: To) => {
     navigate(route);
   };
 
+  const routeToKey: Record<string, string> = {
+    "/": "1",
+    "/board": "2",
+    "/settings": "3",
+    "/about": "4",
+  };
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -51,7 +58,7 @@ const TopAppBar: React.FC = () => {
       </div>
       <Menu
         mode="horizontal"
-        defaultSelectedKeys={["2"]}
+        defaultSelectedKeys={[routeToKey[location.pathname]]}
         items={items}
         style={{ flex: 1, minWidth: 0 }}
       ></Menu>

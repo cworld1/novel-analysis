@@ -1,5 +1,5 @@
 import React from "react";
-import { To, useNavigate } from "react-router-dom";
+import { To, useNavigate, useLocation } from "react-router-dom";
 // Ant design
 import { Menu, MenuProps } from "antd";
 import {
@@ -12,10 +12,18 @@ import {
 
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const handleClick = (route: To) => {
     navigate(route);
   };
 
+  const routeToKey: Record<string, string> = {
+    "/board": "1",
+    "/board/type": "2",
+    "/board/author": "3",
+    "/board/comment": "4",
+    "/board/character": "5",
+  };
   const items: MenuProps["items"] = [
     {
       key: "1",
@@ -50,7 +58,9 @@ const Sidebar: React.FC = () => {
     },
   ];
 
-  return <Menu defaultSelectedKeys={["1"]} items={items} />;
+  return (
+    <Menu defaultSelectedKeys={[routeToKey[location.pathname]]} items={items} />
+  );
 };
 
 export default Sidebar;
