@@ -4,7 +4,7 @@ import csv
 from pyecharts import options as opts
 from pyecharts.charts import Bar, Pie
 
-from anal_helper import convert_wan
+from anal.anal_helper import convert_wan
 
 
 class AnalType:
@@ -43,11 +43,12 @@ class AnalType:
                 "ylabel": "Mean Popularity",
             }
             draw = self.draw_bar(type_counts, type_popularity, context)
-
         elif shape == "pie":
             # Draw pie plot
             context = {"title": "Composition of Novel Types"}
             draw = self.draw_pie(type_counts, context)
+        else:
+            return None
 
         return draw
 

@@ -1,7 +1,7 @@
 import os
 import random
 
-from fetch_helper import get_content
+from fetch.fetch_helper import get_content
 
 
 class FetchNovel:
