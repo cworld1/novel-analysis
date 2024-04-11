@@ -8,7 +8,7 @@ import { routeItems } from "../components/Routes";
 
 const { Sider, Content, Footer } = Layout;
 
-const BoardPage: React.FC = () => {
+const BoardTemplate: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -65,4 +65,4 @@ const BoardPage: React.FC = () => {
   );
 };
 
-export default BoardPage;
+export default BoardTemplate;

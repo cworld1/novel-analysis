@@ -6,11 +6,11 @@ import { routeItems } from "../components/Routes";
 
 const { Content, Footer } = Layout;
 
-interface CommonPageProps {
+interface CommonTemplateProps {
   PageContent: React.ElementType;
 }
 
-const CommonPage: React.FC<CommonPageProps> = ({ PageContent }) => {
+const CommonTemplate: React.FC<CommonTemplateProps> = ({ PageContent }) => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -39,4 +39,4 @@ const CommonPage: React.FC<CommonPageProps> = ({ PageContent }) => {
   );
 };
 
-export default CommonPage;
+export default CommonTemplate;
