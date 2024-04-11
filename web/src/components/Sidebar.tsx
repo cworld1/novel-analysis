@@ -1,6 +1,6 @@
 import React from "react";
 import { To, useNavigate, useLocation } from "react-router-dom";
-// Ant design
+// Antd
 import { Menu, MenuProps } from "antd";
 import {
   AppstoreOutlined,

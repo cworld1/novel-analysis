@@ -1,10 +1,9 @@
 import React from "react";
 // Antd
 import { Breadcrumb, Layout, theme } from "antd";
+const { Content, Footer } = Layout;
 // Components
 import { routeItems } from "../components/Routes";
-
-const { Content, Footer } = Layout;
 
 interface CommonTemplateProps {
   PageContent: React.ElementType;

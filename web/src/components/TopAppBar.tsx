@@ -1,7 +1,7 @@
 import React from "react";
 import { To, useNavigate, useLocation } from "react-router-dom";
-// Ant design
-import { Menu, MenuProps } from "antd";
+// Antd
+import { Flex, Menu, MenuProps } from "antd";
 // Assets
 import reactLogo from "../assets/react.svg";
 
@@ -50,14 +50,15 @@ const TopAppBar: React.FC = () => {
         width: "100%",
       }}
     >
-      <div className="logo" style={{ display: "flex", width: 200 - 24 - 10 }}>
+      <Flex className="logo" style={{ width: 200 - 24 - 10 }}>
         <img src={reactLogo} className="logo react" alt="React logo" />
         <span className="title" style={{ marginLeft: "10px" }}>
           React
         </span>
-      </div>
+      </Flex>
       <Menu
         mode="horizontal"
+        selectedKeys={[routeToKey[location.pathname]]}
         defaultSelectedKeys={[routeToKey[location.pathname]]}
         items={items}
         style={{ flex: 1, minWidth: 0 }}

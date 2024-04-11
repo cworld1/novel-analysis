@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 // Antd
 import { Breadcrumb, Layout, theme } from "antd";
+const { Sider, Content, Footer } = Layout;
 // Components
 import Sidebar from "../components/Sidebar";
 import { routeItems } from "../components/Routes";
-
-const { Sider, Content, Footer } = Layout;
 
 const BoardTemplate: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);

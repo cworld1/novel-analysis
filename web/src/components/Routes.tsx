@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 // Pages
 import HomePage from "../pages/Home";
 import BoardTemplate from "../templates/Board";
@@ -50,10 +50,10 @@ export const routeItems = (): { title: string | JSX.Element }[] => {
       }
 
       if (path === "home") {
-        return { title: <a href="/">{title}</a> };
+        return { title: <Link to="/">{title}</Link> };
       } else if (index < paths.length) {
         const href = "/" + paths.slice(0, index).join("/");
-        return { title: <a href={href}>{title}</a> };
+        return { title: <Link to={href}>{title}</Link> };
       } else {
         return { title: title };
       }
