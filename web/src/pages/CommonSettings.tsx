@@ -1,24 +1,35 @@
-import React from 'react';
+import React, { useContext } from "react";
 
-const SettingsPage: React.FC = () => (
-  <div>
-    <h2>Settings</h2>
-    <p>long content</p>
-    <p>...</p>
-    <p>...</p>
-    <p>...</p>
-    <p>...</p>
-    <p>more</p>
-    <p>...</p>
-    <p>...</p>
-    <p>...</p>
-    <p>...</p>
-    <p>more</p>
-    <p>...</p>
-    <p>...</p>
-    <p>...</p>
-    <p>content</p>
-  </div>
-);
+import {
+  Button,
+  Space,
+  Input,
+  ColorPicker,
+  Divider,
+  Switch,
+  theme,
+} from "antd";
+import { ThemeContext } from "../components/ThemeProvider";
+
+const SettingsPage: React.FC = () => {
+  const { currentTheme, setCurrentTheme } = useContext(ThemeContext);
+  return (
+    <>
+      {/* <ColorPicker showText value={color} onChangeComplete={} /> */}
+      <Divider />
+      <Space>
+        <Switch
+          checked={currentTheme === "dark"}
+          onChange={(checked) => setCurrentTheme(checked ? "dark" : "light")}
+        />
+      </Space>
+      <Divider />
+      <Space>
+        <Input placeholder="Please Input" />
+        <Button type="primary">Submit</Button>
+      </Space>
+    </>
+  );
+};
 
 export default SettingsPage;
