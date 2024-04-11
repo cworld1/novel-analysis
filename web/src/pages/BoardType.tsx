@@ -7,7 +7,7 @@ const getImage = async (shape: string) => {
     renderer: "canvas",
   });
   axios
-    .get(`http://127.0.0.1:5000/plot/type?shape=${shape}`)
+    .get(`http://127.0.0.1:5000/anal/type?shape=${shape}`)
     .then(function (result) {
       chart.setOption(result.data);
     })
