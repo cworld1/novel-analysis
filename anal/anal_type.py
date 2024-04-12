@@ -118,5 +118,5 @@ class AnalType:
 
 
 # Test
-anal_type = AnalType()
-anal_type.anal(shape="bar").render()
+# anal_type = AnalType()
+# anal_type.anal(shape="bar").render()
