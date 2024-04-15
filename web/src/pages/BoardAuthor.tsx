@@ -6,14 +6,14 @@ const { Title, Paragraph } = Typography;
 import axios from "axios";
 import * as echarts from "echarts";
 
-const BoardTypePage: React.FC = () => {
+const BoardAuthorPage: React.FC = () => {
   const {
     token: { colorFillQuaternary, borderRadiusLG },
   } = theme.useToken();
 
   const getImage = async (shape: string) => {
     axios
-      .get(`http://127.0.0.1:5000/anal/type?shape=${shape}`)
+      .get(`http://127.0.0.1:5000/anal/author?shape=${shape}`)
       .then(function (result) {
         var chart = echarts.init(document.getElementById(shape), "white", {
           renderer: "canvas",
@@ -28,7 +28,7 @@ const BoardTypePage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       getImage("bar");
-      getImage("pie");
+      // getImage("pie");
     };
 
     fetchData();
@@ -53,13 +53,13 @@ const BoardTypePage: React.FC = () => {
           <Spin />
         </div>
       </Paragraph>
-      <Paragraph>
+      {/* <Paragraph>
         <div id="pie" style={chartStyle}>
           <Spin />
         </div>
-      </Paragraph>
+      </Paragraph> */}
     </>
   );
 };
 
-export default BoardTypePage;
+export default BoardAuthorPage;

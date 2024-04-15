@@ -65,14 +65,15 @@ def app_anal_type():
     shape = request.args.get("shape")
     draw = anal_type.anal(shape=shape)
     return draw.dump_options_with_quotes()
-# Test example：http://127.0.0.1:5000/fetch/banners
-@app.route("/fetch/banners")
-def app_fetch_banners_info():
-    return fetch_banner.fetch_banners_info()
-# Test example：http://127.0.0.1:5000/fetch/banner?id=
-@app.route("/fetch/banner")
-def app_fetch_banner():
-    image_id = request.args.get("id")
-    return fetch_banner.fetch_banner(image_id)
+
+
+# Get anal author echart infos
+@app.route("/anal/author")
+# Test example：http://127.0.0.1:5000/anal/author?shape=bar
+def app_anal_author():
+    shape = request.args.get("shape")
+    draw = anal_author.anal(shape=shape)
+    return draw.dump_options_with_quotes()
+
 
 app.run(debug=True)

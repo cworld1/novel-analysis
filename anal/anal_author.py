@@ -9,12 +9,13 @@ class AnalAuthor:
     primary_book_folder = "rank_book_info"
     additional_books_folder = "author_book_info"
 
-    def __init__(self, path="./data", file="books.csv") -> None:
+    def __init__(self, path="./data", file="authors.csv") -> None:
         self.path = path
         self.file = file
 
-    def anal(self):
+    def anal(self, shape="bar"):
         authors_books = {}
+
         with open(f"{self.path}/{self.file}", "r", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
@@ -33,8 +34,22 @@ class AnalAuthor:
 
         analysis_data = self.anal_authors_genre_pop(authors_books)
         analysis_df = pd.DataFrame(analysis_data)
-        self.draw_genre_popularity_bar(analysis_df)
-        self.draw_wordcount_popularity_scatter(analysis_df)
+
+        if shape == "bar":
+            # Draw bar plot
+            context = {
+                "title": "Average Popularity by Preferred Genre",
+                "xlabel": "Preferred Genre",
+                "ylabel": "Average Collect Count",
+            }
+            draw = self.draw_genre_popularity_bar(analysis_df, context)
+        elif shape == "scatter":
+            # Draw scatter plot
+            draw = self.draw_wordcount_popularity_scatter(analysis_df)
+        else:
+            return None
+
+        return draw
 
     def anal_authors_genre_pop(self, authors_books):
         analysis_data = []
@@ -76,7 +91,7 @@ class AnalAuthor:
             )
         return analysis_data
 
-    def draw_genre_popularity_bar(self, analysis_data):
+    def draw_genre_popularity_bar(self, analysis_data, context):
         avg_pop_by_genre = (
             analysis_data.groupby("PreferredGenreStr")["AveragePopularity"]
             .mean()
@@ -85,14 +100,17 @@ class AnalAuthor:
         bar = (
             Bar()
             .add_xaxis(list(avg_pop_by_genre.index))
-            .add_yaxis("Average Popularity", list(avg_pop_by_genre.values))
+            .add_yaxis(context["ylabel"], list(avg_pop_by_genre.values))
             .set_global_opts(
-                title_opts=opts.TitleOpts(title="Average Popularity by Genre"),
-                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=-45)),
-                yaxis_opts=opts.AxisOpts(name="Average Collect Count"),
+                title_opts=opts.TitleOpts(title=context["title"]),
+                xaxis_opts=opts.AxisOpts(
+                    name=context["xlabel"], axislabel_opts=opts.LabelOpts(rotate=-45)
+                ),
+                yaxis_opts=opts.AxisOpts(name=context["ylabel"]),
+                datazoom_opts=opts.DataZoomOpts(),
             )
         )
-        bar.render("genre_popularity_bar.html")
+        return bar
 
     def draw_wordcount_popularity_scatter(self, analysis_data):
         word_counts = analysis_data["AverageWords"].tolist()
@@ -111,9 +129,10 @@ class AnalAuthor:
                 yaxis_opts=opts.AxisOpts(name="Average Collect Count"),
             )
         )
-        scatter.render("wordcount_popularity_scatter.html")
+        return scatter
 
 
 # Test
-anal_author = AnalAuthor()
-anal_author.anal()
+# anal_author = AnalAuthor()
+# anal_author.anal(shape="bar").render("genre_popularity_bar.html")
+# anal_author.anal(shape="scatter").render("wordcount_popularity_scatter.html")
