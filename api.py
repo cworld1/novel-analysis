@@ -1,13 +1,15 @@
 from flask import Flask, request
-from anal.anal_type import AnalType
 from fetch.fetch_novel import FetchNovel
 from fetch.fetch_cover import FetchCover
 from fetch.fetch_banner import FetchBanner
-import os
-anal_type = AnalType()
+from anal.anal_type import AnalType
+from anal.anal_author import AnalAuthor
+
 fetch_novel = FetchNovel(sub_folder="rank_book_info")
 fetch_cover = FetchCover()
-fetch_banner =FetchBanner()
+fetch_banner = FetchBanner()
+anal_type = AnalType()
+anal_author = AnalAuthor()
 app = Flask(__name__)
 
 
@@ -18,25 +20,47 @@ def add_cors_headers(response):
     return response
 
 
-# Test example：http://127.0.0.1:5000/fetch/novel?choose=random&count=3
+### Fetch basic infos ###
+
+
+# Fetch novel basic infos
 @app.route("/fetch/novel")
+# Test example：http://127.0.0.1:5000/fetch/novel?choose=random&count=3
 def app_fetch_novel():
     choose = request.args.get("choose")
     count = int(request.args.get("count"))
-    info = fetch_novel.fetch(choose=choose, count=count)
-    return info
+    return fetch_novel.fetch(choose=choose, count=count)
 
 
-# Test example：http://127.0.0.1:5000/fetch/cover?&count=3
+# Fetch novel cover randomly
 @app.route("/fetch/cover")
+# Test example：http://127.0.0.1:5000/fetch/cover?&count=3
 def app_fetch_cover():
     count = int(request.args.get("count"))
-    covers = fetch_cover.fetch(count=count)
-    return covers
+    return fetch_cover.fetch(count=count)
 
 
-# Test example：http://127.0.0.1:5000/anal/type?shape=bar
+# Fetch banner info
+@app.route("/fetch/banners")
+# Test example：http://127.0.0.1:5000/fetch/banners
+def app_fetch_banner_info():
+    return fetch_banner.fetch_banner_info()
+
+
+# Fetch banner image
+@app.route("/fetch/banner")
+# Test example：http://127.0.0.1:5000/fetch/banner?id=3
+def app_fetch_banner():
+    image_id = request.args.get("id")
+    return fetch_banner.fetch_banner(image_id)
+
+
+### Get anal infos ###
+
+
+# Get anal type echart infos
 @app.route("/anal/type")
+# Test example：http://127.0.0.1:5000/anal/type?shape=bar
 def app_anal_type():
     shape = request.args.get("shape")
     draw = anal_type.anal(shape=shape)
