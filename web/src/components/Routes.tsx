@@ -2,12 +2,13 @@ import React from "react";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 // Pages
 import HomePage from "../pages/Home";
-import BoardTemplate from "../templates/Board";
 import CommonTemplate from "../templates/Common";
-import BoardHomePage from "../pages/BoardHome";
 import SettingsPage from "../pages/CommonSettings";
 import AboutPage from "../pages/CommonAbout";
+import BoardTemplate from "../templates/Board";
+import BoardHomePage from "../pages/BoardHome";
 import BoardTypePage from "../pages/BoardType";
+import BoardAuthorPage from "../pages/BoardAuthor";
 
 export const RouteContent: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ export const RouteContent: React.FC = () => {
       <Route path="/board" element={<BoardTemplate />}>
         <Route path="/board" element={<BoardHomePage />} />
         <Route path="/board/type" element={<BoardTypePage />} />
+        <Route path="/board/author" element={<BoardAuthorPage />} />
       </Route>
       <Route
         path="/settings"
