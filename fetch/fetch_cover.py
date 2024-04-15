@@ -4,7 +4,7 @@ import base64
 
 
 class FetchCover:
-    def __init__(self, path="./data", sub_folder="covers") -> None:
+    def __init__(self, path="./data", sub_folder="cover_img") -> None:
         # Init path
         self.detailed_path = f"{path}/{sub_folder}"
 
