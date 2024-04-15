@@ -15,7 +15,7 @@ def add_cors_headers(response):
     response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
     return response
 
-
+#TestExample：http://127.0.0.1:5000/fetch/novel?choose=random&count=3
 @app.route("/fetch/novel")
 def app_fetch_novel():
     choose = request.args.get("choose")
@@ -23,14 +23,14 @@ def app_fetch_novel():
     info = fetch_novel.fetch(choose=choose, count=count)
     return info
 
-
+#TestExample：http://127.0.0.1:5000/fetch/cover?&count=3
 @app.route("/fetch/cover")
 def app_fetch_cover():
     count = int(request.args.get("count"))
     covers = fetch_cover.fetch(count=count)
     return covers
 
-
+#TestExample：http://127.0.0.1:5000/anal/type?shape=bar
 @app.route("/anal/type")
 def app_anal_type():
     shape = request.args.get("shape")
