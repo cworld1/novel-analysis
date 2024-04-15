@@ -7,39 +7,37 @@ const { Header } = Layout;
 import reactLogo from "../assets/react.svg";
 
 const TopAppBar: React.FC = () => {
+  // React router
   const navigate = useNavigate();
+  const getKey = () => "/" + (location.pathname.split("/")[1] || "");
   const location = useLocation();
   const handleClick = (route: To) => {
     navigate(route);
   };
+  // Theme color
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const routeToKey: Record<string, string> = {
-    "/": "1",
-    "/board": "2",
-    "/settings": "3",
-    "/about": "4",
-  };
+  // Menu items
   const items: MenuProps["items"] = [
     {
-      key: "1",
+      key: "/",
       label: "Home",
       onClick: () => handleClick("/"),
     },
     {
-      key: "2",
+      key: "/board",
       label: "Dashboard",
       onClick: () => handleClick("/board"),
     },
     {
-      key: "3",
+      key: "/settings",
       label: "Settings",
       onClick: () => handleClick("/settings"),
     },
     {
-      key: "4",
+      key: "/about",
       label: "About",
       onClick: () => handleClick("/about"),
     },
@@ -66,8 +64,8 @@ const TopAppBar: React.FC = () => {
       </Flex>
       <Menu
         mode="horizontal"
-        selectedKeys={[routeToKey[location.pathname]]}
-        defaultSelectedKeys={[routeToKey[location.pathname]]}
+        selectedKeys={[getKey()]}
+        defaultSelectedKeys={[getKey()]}
         items={items}
         style={{ flex: 1, minWidth: 0 }}
       ></Menu>

@@ -11,47 +11,43 @@ import {
 } from "@ant-design/icons";
 
 const Sidebar: React.FC = () => {
+  // React router
   const navigate = useNavigate();
+  const getKey = () => "/" + (location.pathname.split("/")[2] || "");
   const location = useLocation();
   const handleClick = (route: To) => {
     navigate(route);
   };
 
-  const routeToKey: Record<string, string> = {
-    "/board": "1",
-    "/board/type": "2",
-    "/board/author": "3",
-    "/board/comment": "4",
-    "/board/character": "5",
-  };
+  // Menu items
   const items: MenuProps["items"] = [
     {
-      key: "1",
+      key: "/",
       icon: <DashboardOutlined />,
       label: "Dashboard",
       onClick: () => handleClick("/board"),
     },
     { type: "divider" },
     {
-      key: "2",
+      key: "/type",
       icon: <AppstoreOutlined />,
       label: "Type",
       onClick: () => handleClick("/board/type"),
     },
     {
-      key: "3",
+      key: "/author",
       icon: <UserOutlined />,
       label: "Author",
       onClick: () => handleClick("/board/author"),
     },
     {
-      key: "4",
+      key: "/comment",
       icon: <CommentOutlined />,
       label: "Comment",
       onClick: () => handleClick("/board/comment"),
     },
     {
-      key: "5",
+      key: "/character",
       icon: <UsergroupAddOutlined />,
       label: "Character",
       onClick: () => handleClick("/board/character"),
@@ -60,8 +56,8 @@ const Sidebar: React.FC = () => {
 
   return (
     <Menu
-      selectedKeys={[routeToKey[location.pathname]]}
-      defaultSelectedKeys={[routeToKey[location.pathname]]}
+      selectedKeys={[getKey()]}
+      defaultSelectedKeys={[getKey()]}
       items={items}
     />
   );
