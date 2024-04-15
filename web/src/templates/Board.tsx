@@ -36,7 +36,7 @@ const BoardTemplate: React.FC = () => {
       <Layout
         style={{
           marginLeft: collapsed ? 80 : 200,
-          padding: "0 24px 24px",
+          padding: "0 50px 50px",
           transition: "margin-left 0.22s",
         }}
       >
