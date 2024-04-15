@@ -10,15 +10,29 @@ interface BookInfo {
 }
 
 const BoardHomePage: React.FC = () => {
-  const [books, setBooks] = useState<BookInfo[] | null>(null);
-  const bookCount = 4;
+  const bookCount = 12;
+  const [books, setBooks] = useState<Array<BookInfo>>(
+    Array(bookCount).fill({ bookName: "", authorName: "" })
+  );
+  const [images, setImages] = useState<string[]>(Array(bookCount).fill(""));
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const url = `http://127.0.0.1:5000/fetch/novel?choose=random&count=${bookCount}`;
+    const bookUrl = `http://127.0.0.1:5000/fetch/novel?choose=random&count=${bookCount}`;
     axios
-      .get<BookInfo[]>(url)
+      .get<BookInfo[]>(bookUrl)
       .then((response) => {
         setBooks(response.data);
+        setLoading(false);
+      })
+      .catch((error) => console.error("Error:", error));
+
+    const imageUrl = `http://127.0.0.1:5000/fetch/cover?count=${bookCount}`;
+    axios
+      .get<string[]>(imageUrl)
+      .then((response) => {
+        setImages(response.data);
+        setLoading(false);
       })
       .catch((error) => console.error("Error:", error));
   }, []);
@@ -34,19 +48,29 @@ const BoardHomePage: React.FC = () => {
   return (
     <>
       <h2>Board</h2>
-      <Row gutter={16}>
+      <Row justify="space-evenly" gutter={[16, 16]}>
         {books &&
           books.map((book, index) => (
-            <Col xs={24} md={12} key={index}>
+            <Col
+              xs={{ span: 12 }}
+              sm={{ span: 10 }}
+              md={{ span: 8 }}
+              lg={{ span: 6 }}
+              xl={{ span: 4 }}
+              key={index}
+            >
               <Card
                 hoverable
-                style={{ width: 240 }}
+                style={{ width: "100%" }}
                 cover={
-                  <img
-                    alt="example"
-                    src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-                  />
+                  images && images[index] ? (
+                    <img
+                      alt={`cover${index}`}
+                      src={`data:image/jpeg;base64,${images[index]}`}
+                    />
+                  ) : null
                 }
+                loading={loading}
               >
                 <Meta title={book.bookName} description={book.authorName} />
               </Card>
