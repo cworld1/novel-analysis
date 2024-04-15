@@ -2,10 +2,12 @@ from flask import Flask, request
 from anal.anal_type import AnalType
 from fetch.fetch_novel import FetchNovel
 from fetch.fetch_cover import FetchCover
-
+from fetch.fetch_banner import FetchBanner
+import os
 anal_type = AnalType()
 fetch_novel = FetchNovel(sub_folder="rank_book_info")
 fetch_cover = FetchCover()
+fetch_banner =FetchBanner()
 app = Flask(__name__)
 
 
@@ -39,6 +41,14 @@ def app_anal_type():
     shape = request.args.get("shape")
     draw = anal_type.anal(shape=shape)
     return draw.dump_options_with_quotes()
-
+# Test example：http://127.0.0.1:5000/fetch/banners
+@app.route("/fetch/banners")
+def app_fetch_banners_info():
+    return fetch_banner.fetch_banners_info()
+# Test example：http://127.0.0.1:5000/fetch/banner?id=
+@app.route("/fetch/banner")
+def app_fetch_banner():
+    image_id = request.args.get("id")
+    return fetch_banner.fetch_banner(image_id)
 
 app.run(debug=True)
