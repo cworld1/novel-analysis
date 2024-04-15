@@ -6,6 +6,13 @@
 
 A simple project for analyzing Chinese novels. All data is crawled from [红袖读书](https://www.hongxiu.com/)
 
+## Main technology stack
+
+- Python: Flask, Pyecharts, statsmodels
+- Node.js: Bun, Vite, React, Ant Design
+- Database: Json, CSV
+<!-- - Rust: Pyo3 -->
+
 ## Project Structure
 
 - `anal`: Analysis scripts
@@ -67,46 +74,27 @@ Environment requirements:
 Environment requirements:
 
 - [Nodejs](https://nodejs.org/): 18.0.0+
-- Corepack: 0.10.0+
-
-> If your Node.js version is lower than 16.13.0，Please install [corepack](https://nodejs.org/api/corepack.html) first.
->
-> ```shell
-> npm install -g corepack
-> ```
->
-> If you are macOS user and use brew to install Node.js, you can use the following command to install corepack:
->
-> ```shell
-> brew install corepack
-> ```
-
-1. Enable pnpm:
-
-   ```shell
-   corepack enable
-   corepack prepare pnpm@latest --activate
-   ```
+- [Bun](https://bunjs.dev/): 1.0.0+
 
 2. Install dependencies:
 
    ```shell
-   pnpm install
+   bun install
    ```
 
 3. Start the development server:
 
    ```shell
-   pnpm dev
+   bun dev
    ```
 
    This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
 4. Some useful commands:
 
-   - `pnpm build`: Bundles the app into static files for production.
-   - `pnpm lint`: Lints the project for potential errors.
-   - `pnpm preview`: Preview the production build locally.
+   - `bun build`: Bundles the app into static files for production.
+   - `bun lint`: Lints the project for potential errors.
+   - `bun preview`: Preview the production build locally.
 
 ## Contributions
 
