@@ -1,10 +1,11 @@
 from flask import Flask, request
 from anal.anal_type import AnalType
 from fetch.fetch_novel import FetchNovel
-
+from fetch.fetch_cover import FetchCover
 
 anal_type = AnalType()
 fetch_novel = FetchNovel(sub_folder="rank_book_info")
+fetch_cover = FetchCover()
 app = Flask(__name__)
 
 
@@ -21,6 +22,13 @@ def app_fetch_novel():
     count = int(request.args.get("count"))
     info = fetch_novel.fetch(choose=choose, count=count)
     return info
+
+
+@app.route("/fetch/cover")
+def app_fetch_cover():
+    count = int(request.args.get("count"))
+    covers = fetch_cover.fetch(count=count)
+    return covers
 
 
 @app.route("/anal/type")
