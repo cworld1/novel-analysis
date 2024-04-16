@@ -1,10 +1,11 @@
 import React from "react";
 import { To, useNavigate, useLocation } from "react-router-dom";
 // Antd
-import { Flex, Menu, MenuProps, theme, Layout } from "antd";
+import { Flex, Menu, MenuProps, theme, Layout, Button, Tooltip } from "antd";
 const { Header } = Layout;
 // Assets
 import reactLogo from "../assets/react.svg";
+import { GithubOutlined } from "@ant-design/icons";
 
 const TopAppBar: React.FC = () => {
   // React router
@@ -67,8 +68,20 @@ const TopAppBar: React.FC = () => {
         selectedKeys={[getKey()]}
         defaultSelectedKeys={[getKey()]}
         items={items}
-        style={{ flex: 1, minWidth: 0 }}
       ></Menu>
+      <div style={{ flex: 1, textAlign: "end" }}>
+        <Tooltip placement="bottom" title="Github">
+          <Button type="text">
+            <a
+              href="https://github.com/cworld1/novel_analysis"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <GithubOutlined />
+            </a>
+          </Button>
+        </Tooltip>
+      </div>
     </Header>
   );
 };
