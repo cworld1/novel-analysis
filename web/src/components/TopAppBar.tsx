@@ -71,15 +71,13 @@ const TopAppBar: React.FC = () => {
       ></Menu>
       <div style={{ flex: 1, textAlign: "end" }}>
         <Tooltip placement="bottom" title="Github">
-          <Button type="text">
-            <a
-              href="https://github.com/cworld1/novel_analysis"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <GithubOutlined />
-            </a>
-          </Button>
+          <Button
+            type="text"
+            icon={<GithubOutlined />}
+            onClick={() =>
+              window.open("https://github.com/cworld1/novel_analysis", "_blank")
+            }
+          />
         </Tooltip>
       </div>
     </Header>
