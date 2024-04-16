@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 // Antd
-import { Alert, Card, Carousel, Col, Row, Typography } from "antd";
+import { Alert, Card, Carousel, Col, Row, theme, Typography } from "antd";
 import { ArrowRightOutlined } from "@ant-design/icons";
 const { Meta } = Card;
 const { Title } = Typography;
@@ -68,30 +68,41 @@ const BannerCarousel: React.FC<BannerCarouselProps> = ({ bannerinfos }) => (
 );
 
 // Custom component for displaying book cards
-const BookCard: React.FC<BookCardProps> = ({ book, image, loading }) => (
-  <Card
-    hoverable
-    style={{
-      width: "100%",
-      display: "flex",
-      overflow: "hidden",
-      justifyContent: "space-between",
-    }}
-    cover={
-      image ? (
-        <img
-          alt="cover"
-          style={{ width: 90, height: 120, objectFit: "cover" }}
-          src={`data:image/jpeg;base64,${image}`}
-        />
-      ) : null
-    }
-    loading={loading}
-    actions={[<ArrowRightOutlined style={{ paddingRight: 15 }} key="go" />]}
-  >
-    <Meta title={book.bookName} description={book.authorName} />
-  </Card>
-);
+const BookCard: React.FC<BookCardProps> = ({ book, image, loading }) => {
+  const {
+    token: { borderRadius },
+  } = theme.useToken();
+
+  return (
+    <Card
+      hoverable
+      style={{
+        width: "100%",
+        display: "flex",
+        overflow: "hidden",
+        justifyContent: "space-between",
+      }}
+      cover={
+        image ? (
+          <img
+            alt="cover"
+            style={{
+              width: 90,
+              height: 120,
+              objectFit: "cover",
+              borderRadius: borderRadius,
+            }}
+            src={`data:image/jpeg;base64,${image}`}
+          />
+        ) : null
+      }
+      loading={loading}
+      actions={[<ArrowRightOutlined style={{ paddingRight: 15 }} key="go" />]}
+    >
+      <Meta title={book.bookName} description={book.authorName} />
+    </Card>
+  );
+};
 
 const BoardHomePage: React.FC = () => {
   // Init banner states
