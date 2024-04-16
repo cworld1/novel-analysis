@@ -1,19 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 // Antd
 import { Spin, theme, Typography } from "antd";
 const { Title, Paragraph } = Typography;
 // Echarts
 import axios from "axios";
 import * as echarts from "echarts";
+import { ConfigContext } from "../components/ConfigProvider";
 
 const BoardTypePage: React.FC = () => {
   const {
     token: { colorFillQuaternary, borderRadiusLG },
   } = theme.useToken();
+  const { serverAddress } = useContext(ConfigContext);
 
   const getImage = async (shape: string) => {
     axios
-      .get(`http://127.0.0.1:5000/anal/type?shape=${shape}`)
+      .get(`${serverAddress}/anal/type?shape=${shape}`)
       .then(function (result) {
         var chart = echarts.init(document.getElementById(shape), "white", {
           renderer: "canvas",

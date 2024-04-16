@@ -1,19 +1,46 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 // Antd
-import { Button, ColorPicker, List, Select, Typography } from "antd";
+import { Button, ColorPicker, Input, List, Select, Typography } from "antd";
 const { Title } = Typography;
 // Components
-import { ThemeContext, ServerContext } from "../components/SettingsContext";
+import { ConfigContext } from "../components/ConfigProvider";
 import {
   BgColorsOutlined,
+  CloudServerOutlined,
   DeleteOutlined,
   ReloadOutlined,
   SkinOutlined,
 } from "@ant-design/icons";
 
 const SettingsPage: React.FC = () => {
-  const { currentTheme, setCurrentTheme, colorPrimary, setColorPrimary } =
-    useContext(ThemeContext);
+  const {
+    currentTheme,
+    setCurrentTheme,
+    colorPrimary,
+    setColorPrimary,
+    serverAddress,
+    setServerAddress,
+  } = useContext(ConfigContext);
+  const [inputValue, setInputValue] = useState(serverAddress);
+
+  const serverData = [
+    {
+      title: "Server address",
+      avatar: <CloudServerOutlined style={{ fontSize: 27, height: 48 }} />,
+      desc: "Change the address of the local data server",
+      actions: [
+        <Input
+          allowClear
+          placeholder="http://127.0.0.1:5000"
+          value={inputValue}
+          onChange={(event) => setInputValue(event.target.value)}
+          onBlur={() => {
+            setServerAddress(inputValue);
+          }}
+        />,
+      ],
+    },
+  ];
 
   const appearanceData = [
     {
@@ -78,6 +105,13 @@ const SettingsPage: React.FC = () => {
   return (
     <>
       <Title>Settings</Title>
+      <Title level={4}>Server</Title>
+      <List
+        bordered
+        itemLayout="horizontal"
+        dataSource={serverData}
+        renderItem={renderListItem}
+      />
       <Title level={4}>Appearance</Title>
       <List
         bordered
