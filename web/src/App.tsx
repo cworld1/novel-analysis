@@ -12,7 +12,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <ThemeProvider>
-        <Layout>
+        <Layout style={{ minHeight: "100vh" }}>
           {/* Header */}
           <TopAppBar />
           {/* Contents */}
