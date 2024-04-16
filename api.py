@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_file
 from fetch.fetch_novel import FetchNovel
 from fetch.fetch_cover import FetchCover
 from fetch.fetch_banner import FetchBanner
@@ -52,7 +52,8 @@ def app_fetch_banner_info():
 # Test example：http://127.0.0.1:5000/fetch/banner?id=3
 def app_fetch_banner():
     image_id = request.args.get("id")
-    return fetch_banner.fetch_banner(image_id)
+    file_path = fetch_banner.fetch_banner(image_id)
+    return send_file(file_path, mimetype="image/jpeg")
 
 
 ### Get anal infos ###

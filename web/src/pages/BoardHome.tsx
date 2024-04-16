@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 // Antd
-import { Card, Carousel, Col, Row, Typography } from "antd";
+import { Alert, Card, Carousel, Col, Row, Typography } from "antd";
 import { ArrowRightOutlined } from "@ant-design/icons";
 const { Meta } = Card;
 const { Title } = Typography;
@@ -16,6 +16,56 @@ interface BookCardProps {
   image: string;
   loading: boolean;
 }
+
+// Banner interface
+interface BannerInfo {
+  id: string;
+  link: string;
+  description: string;
+}
+interface BannerCarouselProps {
+  bannerinfos: BannerInfo[];
+}
+
+// Custom component for displaying carousel
+const BannerCarousel: React.FC<BannerCarouselProps> = ({ bannerinfos }) => (
+  <Carousel autoplay style={{ maxWidth: 900, minWidth: 800 }}>
+    {/* <Carousel style={{ maxWidth: 900, minWidth: 800 }}> */}
+    {bannerinfos.map((banner: BannerInfo, index: number) => (
+      <div key={index}>
+        <a
+          href={banner.link}
+          style={{
+            display: "block",
+            background: "#364d79",
+            position: "relative",
+          }}
+        >
+          <img
+            style={{ maxWidth: "100%" }}
+            src={`http://127.0.0.1:5000/fetch/banner?id=${banner.id}`}
+            alt={banner.description}
+          />
+          <p
+            style={{
+              position: "absolute",
+              bottom: 0,
+              padding: "20px 0 25px",
+              margin: 0,
+              width: "100%",
+              textAlign: "center",
+              color: "white",
+              background:
+                "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .6))",
+            }}
+          >
+            {banner.description}
+          </p>
+        </a>
+      </div>
+    ))}
+  </Carousel>
+);
 
 // Custom component for displaying book cards
 const BookCard: React.FC<BookCardProps> = ({ book, image, loading }) => (
@@ -44,62 +94,60 @@ const BookCard: React.FC<BookCardProps> = ({ book, image, loading }) => (
 );
 
 const BoardHomePage: React.FC = () => {
-  // Init basic infos and states
+  // Init banner states
+  const [banners, setBanners] = useState<Array<BannerInfo>>(
+    Array(5).fill({ id: "", link: "", description: "" })
+  );
+  // Init book states
   const bookCount = 12;
   const [books, setBooks] = useState<Array<BookInfo>>(
     Array(bookCount).fill({ bookName: "", authorName: "" })
   );
-  const [images, setImages] = useState<string[]>(Array(bookCount).fill(""));
-  const [loading, setLoading] = useState(true);
+  const [bookImages, setBookImages] = useState<string[]>(
+    Array(bookCount).fill("")
+  );
+  const [bookLoading, setBookLoading] = useState(true);
 
-  // Fetch book info and cover images
   useEffect(() => {
+    // Fetch banner info
+    axios
+      .get<BannerInfo[]>("http://127.0.0.1:5000/fetch/banners")
+      .then((response) => {
+        setBanners(response.data);
+      });
+
+    // Fetch book info
     const bookUrl = `http://127.0.0.1:5000/fetch/novel?choose=random&count=${bookCount}`;
     axios
       .get<BookInfo[]>(bookUrl)
       .then((response) => {
         setBooks(response.data);
-        setLoading(false);
+        setBookLoading(false);
       })
       .catch((error) => console.error("Error:", error));
 
+    // Fetch cover images
     const imageUrl = `http://127.0.0.1:5000/fetch/cover?count=${bookCount}`;
     axios
       .get<string[]>(imageUrl)
       .then((response) => {
-        setImages(response.data);
-        setLoading(false);
+        setBookImages(response.data);
+        setBookLoading(false);
       })
       .catch((error) => console.error("Error:", error));
   }, []);
 
-  const contentStyle: React.CSSProperties = {
-    height: "300px",
-    color: "#fff",
-    lineHeight: "300px",
-    textAlign: "center",
-    background: "#364d79",
-    marginBottom: "0",
-  };
-
   return (
     <>
+      <Alert
+        message="Data updated at Apr 16, Tuesday"
+        type="success"
+        showIcon
+        closable
+      />
       <Title>Board</Title>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        <Carousel autoplay style={{ maxWidth: "650px" }}>
-          <div>
-            <h3 style={contentStyle}>1</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>2</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>3</h3>
-          </div>
-          <div>
-            <h3 style={contentStyle}>4</h3>
-          </div>
-        </Carousel>
+        <BannerCarousel bannerinfos={banners} />
       </div>
       <Title level={4}>Recommend Novel Shelves</Title>
       <Row justify="space-evenly" gutter={[16, 16]}>
@@ -115,8 +163,8 @@ const BoardHomePage: React.FC = () => {
             >
               <BookCard
                 book={book}
-                image={images ? images[index] : ""}
-                loading={loading}
+                image={bookImages ? bookImages[index] : ""}
+                loading={bookLoading}
               />
             </Col>
           ))}
