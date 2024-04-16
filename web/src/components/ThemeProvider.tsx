@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { ConfigProvider, theme } from "antd";
-
-export const ThemeContext = React.createContext({
-  currentTheme: "light",
-  setCurrentTheme: (_theme: string) => {},
-  colorPrimary: "#1677ff",
-  setColorPrimary: (_color: string) => {},
-});
+// Components
+import { ThemeContext } from "./SettingsContext";
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentTheme, setCurrentTheme] = useState<string>("light");

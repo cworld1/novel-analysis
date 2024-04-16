@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { Button, ColorPicker, List, Select, Typography } from "antd";
 const { Title } = Typography;
 // Components
-import { ThemeContext } from "../components/ThemeProvider";
+import { ThemeContext, ServerContext } from "../components/SettingsContext";
 import {
   BgColorsOutlined,
   DeleteOutlined,
