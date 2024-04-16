@@ -50,7 +50,7 @@ const BoardAuthorPage: React.FC = () => {
 
   return (
     <>
-      <Title>Type of novel</Title>
+      <Title>Type of Author</Title>
       <Paragraph>
         <div id="bar" style={chartStyle}>
           <Spin />

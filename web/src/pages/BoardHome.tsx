@@ -161,7 +161,7 @@ const BoardHomePage: React.FC = () => {
         showIcon
         closable
       />
-      <Title>Board</Title>
+      <Title>Dashboard</Title>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <BannerCarousel bannerinfos={banners} />
       </div>
