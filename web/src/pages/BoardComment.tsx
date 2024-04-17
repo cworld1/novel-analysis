@@ -5,9 +5,11 @@ const { Title, Paragraph } = Typography;
 // Echarts
 import axios from "axios";
 import * as echarts from "echarts";
+import "echarts-wordcloud";
+// Components
 import { ConfigContext } from "../components/ConfigProvider";
 
-const BoardTypePage: React.FC = () => {
+const BoardAuthorPage: React.FC = () => {
   const {
     token: { colorFillQuaternary, borderRadiusLG },
   } = theme.useToken();
@@ -15,7 +17,7 @@ const BoardTypePage: React.FC = () => {
 
   const getImage = async (shape: string) => {
     axios
-      .get(`${serverAddress}/anal/type?shape=${shape}`)
+      .get(`${serverAddress}/anal/comment?shape=${shape}`)
       .then(function (result) {
         var chart = echarts.init(document.getElementById(shape), "white", {
           renderer: "canvas",
@@ -29,8 +31,8 @@ const BoardTypePage: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      getImage("bar");
-      getImage("pie");
+      getImage("wordcloud");
+      // getImage("pie");
     };
 
     fetchData();
@@ -49,14 +51,9 @@ const BoardTypePage: React.FC = () => {
 
   return (
     <>
-      <Title>Type of novel</Title>
+      <Title>Type of Comment</Title>
       <Paragraph>
-        <div id="bar" style={chartStyle}>
-          <Spin />
-        </div>
-      </Paragraph>
-      <Paragraph>
-        <div id="pie" style={chartStyle}>
+        <div id="wordcloud" style={chartStyle}>
           <Spin />
         </div>
       </Paragraph>
@@ -64,4 +61,4 @@ const BoardTypePage: React.FC = () => {
   );
 };
 
-export default BoardTypePage;
+export default BoardAuthorPage;

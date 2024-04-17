@@ -1,15 +1,18 @@
 from flask import Flask, request, send_file
+
 from fetch.fetch_novel import FetchNovel
 from fetch.fetch_cover import FetchCover
 from fetch.fetch_banner import FetchBanner
 from anal.anal_type import AnalType
 from anal.anal_author import AnalAuthor
+from anal.anal_comment import AnalComment
 
 fetch_novel = FetchNovel(sub_folder="rank_book_info")
 fetch_cover = FetchCover()
 fetch_banner = FetchBanner()
 anal_type = AnalType()
 anal_author = AnalAuthor()
+anal_comment = AnalComment()
 app = Flask(__name__)
 
 
@@ -74,6 +77,15 @@ def app_anal_type():
 def app_anal_author():
     shape = request.args.get("shape")
     draw = anal_author.anal(shape=shape)
+    return draw.dump_options_with_quotes()
+
+
+# Get anal comment echart infos
+@app.route("/anal/comment")
+# Test example：http://127.0.0.1:5000/anal/comment?shape=wordcloud
+def app_anal_commment():
+    shape = request.args.get("shape")
+    draw = anal_comment.anal(shape=shape)
     return draw.dump_options_with_quotes()
 
 

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 // Antd
-import { Alert, Card, Carousel, Col, Row, Typography } from "antd";
+import { Alert, Card, Carousel, Col, Row, theme, Typography } from "antd";
 import { ArrowRightOutlined } from "@ant-design/icons";
+import { ConfigContext } from "../components/ConfigProvider";
 const { Meta } = Card;
 const { Title } = Typography;
 
@@ -28,70 +29,84 @@ interface BannerCarouselProps {
 }
 
 // Custom component for displaying carousel
-const BannerCarousel: React.FC<BannerCarouselProps> = ({ bannerinfos }) => (
-  <Carousel autoplay style={{ maxWidth: 900, minWidth: 800 }}>
-    {/* <Carousel style={{ maxWidth: 900, minWidth: 800 }}> */}
-    {bannerinfos.map((banner: BannerInfo, index: number) => (
-      <div key={index}>
-        <a
-          href={banner.link}
-          style={{
-            display: "block",
-            background: "#364d79",
-            position: "relative",
-          }}
-        >
-          <img
-            style={{ maxWidth: "100%" }}
-            src={`http://127.0.0.1:5000/fetch/banner?id=${banner.id}`}
-            alt={banner.description}
-          />
-          <p
+const BannerCarousel: React.FC<BannerCarouselProps> = ({ bannerinfos }) => {
+  const { serverAddress } = useContext(ConfigContext);
+  return (
+    <Carousel autoplay style={{ maxWidth: 900, minWidth: 800 }}>
+      {/* <Carousel style={{ maxWidth: 900, minWidth: 800 }}> */}
+      {bannerinfos.map((banner: BannerInfo, index: number) => (
+        <div key={index}>
+          <a
+            href={banner.link}
             style={{
-              position: "absolute",
-              bottom: 0,
-              padding: "20px 0 25px",
-              margin: 0,
-              width: "100%",
-              textAlign: "center",
-              color: "white",
-              background:
-                "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .6))",
+              display: "block",
+              background: "#364d79",
+              position: "relative",
             }}
           >
-            {banner.description}
-          </p>
-        </a>
-      </div>
-    ))}
-  </Carousel>
-);
+            <img
+              style={{ maxWidth: "100%" }}
+              src={`${serverAddress}/fetch/banner?id=${banner.id}`}
+              alt={banner.description}
+            />
+            <p
+              style={{
+                position: "absolute",
+                bottom: 0,
+                padding: "20px 0 25px",
+                margin: 0,
+                width: "100%",
+                textAlign: "center",
+                color: "white",
+                background:
+                  "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .6))",
+              }}
+            >
+              {banner.description}
+            </p>
+          </a>
+        </div>
+      ))}
+    </Carousel>
+  );
+};
 
 // Custom component for displaying book cards
-const BookCard: React.FC<BookCardProps> = ({ book, image, loading }) => (
-  <Card
-    hoverable
-    style={{
-      width: "100%",
-      display: "flex",
-      overflow: "hidden",
-      justifyContent: "space-between",
-    }}
-    cover={
-      image ? (
-        <img
-          alt="cover"
-          style={{ width: 90, height: 120, objectFit: "cover" }}
-          src={`data:image/jpeg;base64,${image}`}
-        />
-      ) : null
-    }
-    loading={loading}
-    actions={[<ArrowRightOutlined style={{ paddingRight: 15 }} key="go" />]}
-  >
-    <Meta title={book.bookName} description={book.authorName} />
-  </Card>
-);
+const BookCard: React.FC<BookCardProps> = ({ book, image, loading }) => {
+  const {
+    token: { borderRadius },
+  } = theme.useToken();
+
+  return (
+    <Card
+      hoverable
+      style={{
+        width: "100%",
+        display: "flex",
+        overflow: "hidden",
+        justifyContent: "space-between",
+      }}
+      cover={
+        image ? (
+          <img
+            alt="cover"
+            style={{
+              width: 90,
+              height: 120,
+              objectFit: "cover",
+              borderRadius: borderRadius,
+            }}
+            src={`data:image/jpeg;base64,${image}`}
+          />
+        ) : null
+      }
+      loading={loading}
+      actions={[<ArrowRightOutlined style={{ paddingRight: 15 }} key="go" />]}
+    >
+      <Meta title={book.bookName} description={book.authorName} />
+    </Card>
+  );
+};
 
 const BoardHomePage: React.FC = () => {
   // Init banner states
@@ -108,16 +123,17 @@ const BoardHomePage: React.FC = () => {
   );
   const [bookLoading, setBookLoading] = useState(true);
 
+  const { serverAddress } = useContext(ConfigContext);
   useEffect(() => {
     // Fetch banner info
     axios
-      .get<BannerInfo[]>("http://127.0.0.1:5000/fetch/banners")
+      .get<BannerInfo[]>(`${serverAddress}/fetch/banners`)
       .then((response) => {
         setBanners(response.data);
       });
 
     // Fetch book info
-    const bookUrl = `http://127.0.0.1:5000/fetch/novel?choose=random&count=${bookCount}`;
+    const bookUrl = `${serverAddress}/fetch/novel?choose=random&count=${bookCount}`;
     axios
       .get<BookInfo[]>(bookUrl)
       .then((response) => {
@@ -127,7 +143,7 @@ const BoardHomePage: React.FC = () => {
       .catch((error) => console.error("Error:", error));
 
     // Fetch cover images
-    const imageUrl = `http://127.0.0.1:5000/fetch/cover?count=${bookCount}`;
+    const imageUrl = `${serverAddress}/fetch/cover?count=${bookCount}`;
     axios
       .get<string[]>(imageUrl)
       .then((response) => {
@@ -145,7 +161,7 @@ const BoardHomePage: React.FC = () => {
         showIcon
         closable
       />
-      <Title>Board</Title>
+      <Title>Dashboard</Title>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <BannerCarousel bannerinfos={banners} />
       </div>

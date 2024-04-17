@@ -9,6 +9,7 @@ import BoardTemplate from "../templates/Board";
 import BoardHomePage from "../pages/BoardHome";
 import BoardTypePage from "../pages/BoardType";
 import BoardAuthorPage from "../pages/BoardAuthor";
+import BoardCommentPage from "../pages/BoardComment";
 
 export const RouteContent: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ export const RouteContent: React.FC = () => {
         <Route path="/board" element={<BoardHomePage />} />
         <Route path="/board/type" element={<BoardTypePage />} />
         <Route path="/board/author" element={<BoardAuthorPage />} />
+        <Route path="/board/comment" element={<BoardCommentPage />} />
       </Route>
       <Route
         path="/settings"

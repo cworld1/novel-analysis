@@ -1,19 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 // Antd
 import { Spin, theme, Typography } from "antd";
 const { Title, Paragraph } = Typography;
 // Echarts
 import axios from "axios";
 import * as echarts from "echarts";
+// Components
+import { ConfigContext } from "../components/ConfigProvider";
 
 const BoardAuthorPage: React.FC = () => {
   const {
     token: { colorFillQuaternary, borderRadiusLG },
   } = theme.useToken();
+  const { serverAddress } = useContext(ConfigContext);
 
   const getImage = async (shape: string) => {
     axios
-      .get(`http://127.0.0.1:5000/anal/author?shape=${shape}`)
+      .get(`${serverAddress}/anal/author?shape=${shape}`)
       .then(function (result) {
         var chart = echarts.init(document.getElementById(shape), "white", {
           renderer: "canvas",
@@ -47,7 +50,7 @@ const BoardAuthorPage: React.FC = () => {
 
   return (
     <>
-      <Title>Type of novel</Title>
+      <Title>Type of Author</Title>
       <Paragraph>
         <div id="bar" style={chartStyle}>
           <Spin />
