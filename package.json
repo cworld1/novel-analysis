@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite ./web/",
-    "build": "tsc ./web/ && vite build ./web/",
-    "lint": "eslint ./web/ --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "build": "tsc -b ./web/ && vite build ./web/",
+    "lint": "eslint --ext ts ./web/,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
