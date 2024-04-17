@@ -1,8 +1,9 @@
 from flask import Flask, request, send_file
-
+from flask import jsonify
 from fetch.fetch_novel import FetchNovel
 from fetch.fetch_cover import FetchCover
 from fetch.fetch_banner import FetchBanner
+from fetch.fetch_character import FetchCharacter
 from anal.anal_type import AnalType
 from anal.anal_author import AnalAuthor
 from anal.anal_comment import AnalComment
@@ -10,9 +11,11 @@ from anal.anal_comment import AnalComment
 fetch_novel = FetchNovel(sub_folder="rank_book_info")
 fetch_cover = FetchCover()
 fetch_banner = FetchBanner()
+fetch_character = FetchCharacter()
 anal_type = AnalType()
 anal_author = AnalAuthor()
 anal_comment = AnalComment()
+
 app = Flask(__name__)
 
 
@@ -57,6 +60,14 @@ def app_fetch_banner():
     image_id = request.args.get("id")
     file_path = fetch_banner.fetch_banner(image_id)
     return send_file(file_path, mimetype="image/jpeg")
+
+
+@app.route("/fetch/character")
+# Test example：http://127.0.0.1:5000/fetch/character?name=longzu
+def app_fetch_character():
+    name = request.args.get("name")
+    detail_data = fetch_character.fetch(name)
+    return jsonify(detail_data)
 
 
 ### Get anal infos ###
