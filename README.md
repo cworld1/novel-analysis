@@ -17,8 +17,14 @@ A simple project for analyzing Chinese novels. All data is crawled from [红袖�
 
 - `anal`: Analysis scripts
 - `crawl`: Crawler scripts
+- `fetch`: Basic info for api scripts
+- `web`: Frontend dashboard
 
 After running the crawler script, the data will be saved in the `data` directory.
+
+## Data Constructed
+
+The repository [Novel Data](https://github.com/cworld1/novel-data) contains the data crawled from [红袖读书](https://www.hongxiu.com/).
 
 ## Local Development
 
@@ -26,6 +32,8 @@ Clone the repository:
 
 ```shell
 git clone https://github.com/cworld1/novel-analysis.git
+# If you wang to also get data, you can also clone the submodule
+# git clone https://github.com/cworld1/novel-analysis.git --recurse-submodules
 cd novel-analysis
 ```
 
