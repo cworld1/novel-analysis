@@ -49,14 +49,11 @@ const Typewriter: React.FC<TypewriterProps> = ({
   }, [displayText, arrayIndex, charIndex, typingCompleted]);
 
   return (
-    <Paragraph>
-      {displayText.map((line, index) => (
-        <>
-          <span>{line}</span>
-          <br />
-        </>
+    <>
+      {displayText.map((line) => (
+        <Paragraph>{line}</Paragraph>
       ))}
-    </Paragraph>
+    </>
   );
 };
 
