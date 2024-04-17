@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 // Antd
 import { Collapse, CollapseProps, Spin, theme, Typography } from "antd";
 const { Title, Paragraph } = Typography;
@@ -32,10 +32,12 @@ const BoardAuthorPage: React.FC = () => {
   };
 
   useEffect(() => {
-    async () => {
+    const fetchData = async () => {
       getImage("wordcloud");
       // getImage("pie");
     };
+
+    fetchData();
   }, []);
 
   const chartStyle = {
