@@ -1,15 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-// Antd
-import { Button, Collapse, CollapseProps, Spin, theme, Typography } from "antd";
-const { Title, Paragraph, Text } = Typography;
-// Echarts
 import axios from "axios";
-import * as echarts from "echarts";
-import "echarts-wordcloud";
+// Antd
+import { Button, Collapse, CollapseProps, Typography } from "antd";
+const { Title, Paragraph, Text } = Typography;
+import { ArrowRightOutlined } from "@ant-design/icons";
 // Components
 import { ConfigContext } from "../components/ConfigProvider";
 import Typewriter from "../components/TypeWriter";
-import { ArrowRightOutlined } from "@ant-design/icons";
+import ChartComponent from "../components/Chart";
 
 // Book interface
 interface BookInfo {
@@ -21,29 +19,18 @@ interface BookInfo {
 
 const BoardAuthorPage: React.FC = () => {
   const bookCount = 12;
-  const {
-    token: { colorFillQuaternary, borderRadiusLG },
-  } = theme.useToken();
   const [books, setBooks] = useState<Array<BookInfo>>();
+  const [wordcloud, setWordcloud] = useState();
   const { serverAddress } = useContext(ConfigContext);
 
-  // Get different images
   const getImage = async (shape: string) => {
-    axios
+    return axios
       .get(`${serverAddress}/anal/comment?shape=${shape}`)
-      .then(function (result) {
-        var chart = echarts.init(document.getElementById(shape), "white", {
-          renderer: "canvas",
-        });
-        chart.setOption(result.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .then((res) => res.data);
   };
   useEffect(() => {
     const fetchData = async () => {
-      getImage("wordcloud");
+      getImage("wordcloud").then((data) => setWordcloud(data));
     };
     fetchData();
 
@@ -56,17 +43,6 @@ const BoardAuthorPage: React.FC = () => {
         setBooks(response.data);
       });
   }, []);
-
-  const chartStyle = {
-    maxWidth: 1000,
-    height: 500,
-    padding: 25,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colorFillQuaternary,
-    borderRadius: borderRadiusLG,
-  };
 
   const items: CollapseProps["items"] = books?.map((book, index) => {
     return {
@@ -91,20 +67,22 @@ const BoardAuthorPage: React.FC = () => {
     };
   });
 
-  const onChange = (key: string | string[]) => {
-    console.log(key);
-  };
+  // const onChange = (key: string | string[]) => {
+  //   console.log(key);
+  // };
 
   return (
     <>
       <Title>Comment of Novel</Title>
       <Paragraph>
-        <div id="wordcloud" style={chartStyle}>
-          <Spin />
-        </div>
+        <ChartComponent option={wordcloud} />
       </Paragraph>
       <Title level={4}>AI Analysis of Novels</Title>
-      <Collapse items={items} defaultActiveKey={["1"]} onChange={onChange} />
+      <Collapse
+        items={items}
+        defaultActiveKey={["1"]}
+        // onChange={onChange}
+      />
     </>
   );
 };

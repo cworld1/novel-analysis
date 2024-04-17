@@ -1,65 +1,41 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
 // Antd
-import { Spin, theme, Typography } from "antd";
+import { Typography } from "antd";
 const { Title, Paragraph } = Typography;
 // Echarts
-import axios from "axios";
-import * as echarts from "echarts";
 // Components
 import { ConfigContext } from "../components/ConfigProvider";
+import ChartComponent from "../components/Chart";
 
 const BoardAuthorPage: React.FC = () => {
-  const {
-    token: { colorFillQuaternary, borderRadiusLG },
-  } = theme.useToken();
+  const [bar, setBar] = useState();
+  const [heatmap, setHeatmap] = useState();
   const { serverAddress } = useContext(ConfigContext);
 
   const getImage = async (shape: string) => {
-    axios
+    return axios
       .get(`${serverAddress}/anal/author?shape=${shape}`)
-      .then(function (result) {
-        var chart = echarts.init(document.getElementById(shape), "white", {
-          renderer: "canvas",
-        });
-        chart.setOption(result.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .then((res) => res.data);
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      getImage("bar");
-      getImage("heatmap");
+      getImage("bar").then((data) => setBar(data));
+      getImage("heatmap").then((data) => setHeatmap(data));
     };
 
     fetchData();
   }, []);
 
-  const chartStyle = {
-    maxWidth: 1000,
-    height: 500,
-    padding: 25,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colorFillQuaternary,
-    borderRadius: borderRadiusLG,
-  };
-
   return (
     <>
       <Title>Author of Novel</Title>
       <Paragraph>
-        <div id="bar" style={chartStyle}>
-          <Spin />
-        </div>
+        <ChartComponent option={bar} />
       </Paragraph>
       <Paragraph>
-        <div id="heatmap" style={chartStyle}>
-          <Spin />
-        </div>
+        <ChartComponent option={heatmap} />
       </Paragraph>
     </>
   );
