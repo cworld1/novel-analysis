@@ -256,3 +256,4 @@ data/
 *.code-workspace
 .DS_Store
 .vite
+*.html
