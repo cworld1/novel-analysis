@@ -29,11 +29,19 @@ class FetchNovel:
             print("No book id provided!")
             return []
 
-        books_infos = [
-            get_content(os.path.join(self.detailed_path, book))["bookInfo"]
-            for book in books
-        ]
-        # Only get each book's first info
+        books_infos = []
+        for book in books:
+            full_content = get_content(os.path.join(self.detailed_path, book))[
+                "bookInfo"
+            ]
+            selected_content = {
+                "bookId": full_content["bookId"],
+                "bookName": full_content["bookName"],
+                "authorName": full_content["authorName"],
+            }
+            books_infos.append(selected_content)
+
+        # Only get each book's necessary info
         return books_infos
 
 
