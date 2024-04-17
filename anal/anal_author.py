@@ -47,17 +47,17 @@ class AnalAuthor:
         elif shape == "scatter":
             # Draw scatter plot
             draw = self.draw_wordcount_popularity_scatter(analysis_df)
-        elif shape =="heat":
-            #Draw heat map
+        elif shape == "heatmap":
+            # Draw heat map
             context = {
                 "title": "Novel Author Popularity Heatmap",
                 "xlabel": "AuthorName",
                 "ylabel": "Popularities Count",
             }
-            draw = self.draw_author_popularity_heatmap(analysis_df,context)
+            draw = self.draw_author_popularity_heatmap(analysis_df, context)
         else:
             return None
-        
+
         return draw
 
     def anal_authors_genre_pop(self, authors_books):
@@ -121,25 +121,25 @@ class AnalAuthor:
         )
         return bar
 
-    def draw_wordcount_popularity_scatter(self, analysis_data):
-        word_counts = analysis_data["AverageWords"].tolist()
-        popularities = analysis_data["AveragePopularity"].tolist()
-        correlation = np.corrcoef(word_counts, popularities)[0, 1]
-        #print("Correlation coefficient between word count and popularity:", correlation)
-        print(analysis_data)
-        scatter = (
-            Scatter()
-            .add_xaxis(word_counts)
-            .add_yaxis("Popularity", popularities)
-            .set_global_opts(
-                title_opts=opts.TitleOpts(
-                    title="Relationship between Word Count and Popularity"
-                ),
-                xaxis_opts=opts.AxisOpts(name="Word Count"),
-                yaxis_opts=opts.AxisOpts(name="Average Collect Count"),
-            )
-        )
-        return scatter
+    # def draw_wordcount_popularity_scatter(self, analysis_data):
+    #     word_counts = analysis_data["AverageWords"].tolist()
+    #     popularities = analysis_data["AveragePopularity"].tolist()
+    #     correlation = np.corrcoef(word_counts, popularities)[0, 1]
+    #     #print("Correlation coefficient between word count and popularity:", correlation)
+    #     print(analysis_data)
+    #     scatter = (
+    #         Scatter()
+    #         .add_xaxis(word_counts)
+    #         .add_yaxis("Popularity", popularities)
+    #         .set_global_opts(
+    #             title_opts=opts.TitleOpts(
+    #                 title="Relationship between Word Count and Popularity"
+    #             ),
+    #             xaxis_opts=opts.AxisOpts(name="Word Count"),
+    #             yaxis_opts=opts.AxisOpts(name="Average Collect Count"),
+    #         )
+    #     )
+    #     return scatter
 
     def draw_author_popularity_heatmap(self, analysis_data, context):
         # 计算平均收藏量的范围，用于设置热力图的颜色映射范围
@@ -150,9 +150,7 @@ class AnalAuthor:
         for _, row in analysis_data.iterrows():
             # 将收藏量取整
             popularity = int(round(row["AveragePopularity"]))
-            heatmap_data.append(
-                [row["Name"], row["PreferredGenreStr"], popularity]
-            )
+            heatmap_data.append([row["Name"], row["PreferredGenreStr"], popularity])
         heatmap = (
             HeatMap()
             .add_xaxis(analysis_data["Name"].tolist())
@@ -163,21 +161,19 @@ class AnalAuthor:
                 label_opts=opts.LabelOpts(is_show=True, position="inside"),
             )
             .set_global_opts(
-                visualmap_opts=opts.VisualMapOpts(min_=min_popularity, max_=max_popularity),
+                visualmap_opts=opts.VisualMapOpts(
+                    min_=min_popularity, max_=max_popularity
+                ),
                 title_opts=opts.TitleOpts(title=context["title"]),
                 xaxis_opts=opts.AxisOpts(name=context["xlabel"]),
                 yaxis_opts=opts.AxisOpts(name=context["ylabel"]),
             )
         )
-        heatmap.width = "1200px"
-        heatmap.height = "800px"
         return heatmap
-
-
 
 
 # Test
 anal_author = AnalAuthor()
 # anal_author.anal(shape="bar").render("genre_popularity_bar.html")
 # anal_author.anal(shape="scatter").render("wordcount_popularity_scatter.html")
-anal_author.anal(shape="heat").render("Author_popularity_heatmap.html")
+# anal_author.anal(shape="heatmap").render("Author_popularity_heatmap.html")

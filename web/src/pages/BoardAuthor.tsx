@@ -31,7 +31,7 @@ const BoardAuthorPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       getImage("bar");
-      // getImage("pie");
+      getImage("heatmap");
     };
 
     fetchData();
@@ -56,11 +56,11 @@ const BoardAuthorPage: React.FC = () => {
           <Spin />
         </div>
       </Paragraph>
-      {/* <Paragraph>
-        <div id="pie" style={chartStyle}>
+      <Paragraph>
+        <div id="heatmap" style={chartStyle}>
           <Spin />
         </div>
-      </Paragraph> */}
+      </Paragraph>
     </>
   );
 };
