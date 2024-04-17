@@ -1,64 +1,40 @@
-import React, { useContext, useEffect } from "react";
-// Antd
-import { Spin, theme, Typography } from "antd";
-const { Title, Paragraph } = Typography;
-// Echarts
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import * as echarts from "echarts";
+// Antd
+import { Typography } from "antd";
+const { Title, Paragraph } = Typography;
+// Components
 import { ConfigContext } from "../components/ConfigProvider";
+import ChartComponent from "../components/Chart";
 
 const BoardTypePage: React.FC = () => {
-  const {
-    token: { colorFillQuaternary, borderRadiusLG },
-  } = theme.useToken();
+  const [bar, setBar] = useState();
+  const [pie, setPie] = useState();
   const { serverAddress } = useContext(ConfigContext);
 
   const getImage = async (shape: string) => {
-    axios
+    return axios
       .get(`${serverAddress}/anal/type?shape=${shape}`)
-      .then(function (result) {
-        var chart = echarts.init(document.getElementById(shape), "white", {
-          renderer: "canvas",
-        });
-        chart.setOption(result.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .then((res) => res.data);
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      getImage("bar");
-      getImage("pie");
+      getImage("bar").then((data) => setBar(data));
+      getImage("pie").then((data) => setPie(data));
     };
 
     fetchData();
   }, []);
 
-  const chartStyle = {
-    maxWidth: 1000,
-    height: 500,
-    padding: 25,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colorFillQuaternary,
-    borderRadius: borderRadiusLG,
-  };
-
   return (
     <>
       <Title>Type of Novel</Title>
       <Paragraph>
-        <div id="bar" style={chartStyle}>
-          <Spin />
-        </div>
+        <ChartComponent option={bar} />
       </Paragraph>
       <Paragraph>
-        <div id="pie" style={chartStyle}>
-          <Spin />
-        </div>
+        <ChartComponent option={pie} />
       </Paragraph>
     </>
   );
