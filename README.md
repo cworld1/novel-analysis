@@ -16,15 +16,16 @@ A simple project for analyzing Chinese novels. All data is crawled from [红袖�
 ## Project Structure
 
 - `anal`: Analysis scripts
+- `data`: Data directory
 - `crawl`: Crawler scripts
 - `fetch`: Basic info for api scripts
 - `web`: Frontend dashboard
 
-After running the crawler script, the data will be saved in the `data` directory.
-
 ## Data Constructed
 
-The repository [Novel Data](https://github.com/cworld1/novel-data) contains the data crawled from [红袖读书](https://www.hongxiu.com/).
+Data can be crawled from the script in the following steps. After running the crawler script, the data will be saved in the `data` directory.
+
+The repository [Novel Data](https://github.com/cworld1/novel-data) also contains the data, which has been a submodule part of this project.
 
 ## Local Development
 
@@ -64,17 +65,17 @@ Environment requirements:
    pip install -r requirements.txt
    ```
 
-3. Run crawler script
+3. Run crawler script (if needed)
 
    ```shell
    python ./crawl/main.py
    ```
 
-4. Run the analysis script
+4. Run the server script
 
    ```shell
-   python ./anal/anal_api.py
-   # or run: python -m flask --app ./anal/anal_api.py run
+   python ./api.py
+   # or run: python -m flask --app ./api.py run
    ```
 
 ### Display Dashboard

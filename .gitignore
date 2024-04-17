@@ -252,7 +252,21 @@ dist-ssr
 *.sw?
 
 ### Customize ###
-data/
+
+# VSCode
 *.code-workspace
+
+# macOS
 .DS_Store
+
+# Vite build
 .vite
+*.tsbuildinfo
+*.d.ts
+web/vite.config.js
+
+# Pyecharts
+*.html
+
+# Git submodule
+data/

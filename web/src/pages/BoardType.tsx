@@ -49,7 +49,7 @@ const BoardTypePage: React.FC = () => {
 
   return (
     <>
-      <Title>Type of novel</Title>
+      <Title>Type of Novel</Title>
       <Paragraph>
         <div id="bar" style={chartStyle}>
           <Spin />

@@ -10,6 +10,7 @@ import BoardHomePage from "../pages/BoardHome";
 import BoardTypePage from "../pages/BoardType";
 import BoardAuthorPage from "../pages/BoardAuthor";
 import BoardCommentPage from "../pages/BoardComment";
+import BoardCharacterPage from "../pages/BoardCharacter";
 
 export const RouteContent: React.FC = () => {
   return (
@@ -20,6 +21,7 @@ export const RouteContent: React.FC = () => {
         <Route path="/board/type" element={<BoardTypePage />} />
         <Route path="/board/author" element={<BoardAuthorPage />} />
         <Route path="/board/comment" element={<BoardCommentPage />} />
+        <Route path="/board/character" element={<BoardCharacterPage />} />
       </Route>
       <Route
         path="/settings"
@@ -37,6 +39,9 @@ export const routeMapping: { [key: string]: string } = {
   home: "Home",
   board: "Dashboard",
   type: "Type",
+  author: "Author",
+  comment: "Comment",
+  character: "Character",
   settings: "Settings",
   about: "About",
 };
