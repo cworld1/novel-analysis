@@ -21,6 +21,7 @@ const SettingsPage: React.FC = () => {
     serverAddress,
     setServerAddress,
   } = useContext(ConfigContext);
+  // save address input for setting content of setaddress
   const [inputValue, setInputValue] = useState(serverAddress);
 
   const serverData = [
