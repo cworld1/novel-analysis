@@ -39,6 +39,9 @@ export const routeMapping: { [key: string]: string } = {
   home: "Home",
   board: "Dashboard",
   type: "Type",
+  author: "Author",
+  comment: "Comment",
+  character: "Character",
   settings: "Settings",
   about: "About",
 };
