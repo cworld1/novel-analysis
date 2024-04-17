@@ -4,23 +4,29 @@ from pyecharts import options as opts
 import random
 
 
-class FetchCharacter:
+class AnalCharacter:
     def __init__(self, path="./data", sub_folder="longzu"):
         # Init path
         self.detailed_path = f"{path}/{sub_folder}/longzu_analysis.json"
 
-    def fetch(self, name):
+    def anal(self, name: str, callback=None):
         if name == "longzu":
+            context = {
+                "title": "MBTI Profile Radar Chart",
+                "series": "MBTI Profile",
+            }
             with open(self.detailed_path, "r", encoding="utf-8") as file:
                 data = json.load(file)
                 for item in data:
                     # 调用create_mbti_radar_chart函数并将返回结果存储为mbtiRadar
-                    item["mbtiRadar"] = self.create_mbti_radar_chart(item["mbti"])
+                    item["mbtiRadar"] = self.draw_mbti_radar(
+                        item["mbti"], context, callback
+                    ).dump_options_with_quotes()
             return data
         else:
             return {}
 
-    def create_mbti_radar_chart(self, mbti_type):
+    def draw_mbti_radar(self, mbti_type: str, context: dict, callback):
         # 完整的属性对应关系，包括所有特性及其对立特性
         scores = {"E": 0, "I": 0, "S": 0, "N": 0, "T": 0, "F": 0, "J": 0, "P": 0}
         pairs = {
@@ -37,7 +43,7 @@ class FetchCharacter:
         # 只随机生成指定MBTI类型中包含的属性的得分
         for trait in mbti_type:
             if scores[trait] == 0:  # 只有当得分未被设置时才生成
-                score = random.randint(51, 100)
+                score = random.randint(51, 89)
                 opposite_trait = pairs[trait]
                 scores[trait] = score
                 scores[opposite_trait] = 100 - score
@@ -60,23 +66,30 @@ class FetchCharacter:
         ]
 
         # 创建雷达图
-        radar_chart = Radar(init_opts=opts.InitOpts(width="600px", height="600px"))
-        radar_chart.add_schema(schema=schema, shape="circle")
-        radar_chart.add(
-            series_name="MBTI Profile",
-            data=[mbti_scores],
-            linestyle_opts=opts.LineStyleOpts(color="#f9713c"),
-            areastyle_opts=opts.AreaStyleOpts(opacity=0.7, color="#f9713c"),
+        radar = (
+            Radar()
+            .add_schema(
+                schema=schema,
+                shape="circle",
+            )
+            .add(
+                series_name=context["series"],
+                data=[mbti_scores],
+                linestyle_opts=opts.LineStyleOpts(width=1),
+                areastyle_opts=opts.AreaStyleOpts(opacity=0.1),
+            )
+            .set_global_opts(
+                title_opts=opts.TitleOpts(title=context["title"]),
+            )
+            .set_series_opts(label_opts=opts.LabelOpts(is_show=True))
         )
-        radar_chart.set_global_opts(
-            title_opts=opts.TitleOpts(title="MBTI Profile Radar Chart")
-        )
-        radar_chart.set_series_opts(label_opts=opts.LabelOpts(is_show=True))
 
-        return radar_chart
+        if callback:
+            callback(radar)
+
+        return radar
 
 
 # Test
-# fetch = FetchCharacter()
-# all_character_data = fetch.fetch("longzu")
-# print(all_character_data)
+# anal_character = AnalCharacter()
+# anal_character.anal("longzu", callback=lambda x: x.render("longzu_mbti_radar.html"))
