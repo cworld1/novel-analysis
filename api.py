@@ -7,6 +7,7 @@ from anal.anal_character import FetchCharacter
 from anal.anal_type import AnalType
 from anal.anal_author import AnalAuthor
 from anal.anal_comment import AnalComment
+from anal.anal_relationship import AnalCharacter
 
 fetch_novel = FetchNovel(sub_folder="rank_book_info")
 fetch_cover = FetchCover()
@@ -15,6 +16,7 @@ fetch_character = FetchCharacter()
 anal_type = AnalType()
 anal_author = AnalAuthor()
 anal_comment = AnalComment()
+anal_character = AnalCharacter()
 
 app = Flask(__name__)
 
@@ -98,6 +100,19 @@ def app_anal_commment():
     shape = request.args.get("shape")
     draw = anal_comment.anal(shape=shape)
     return draw.dump_options_with_quotes()
+
+
+# Get anal character echart infos
+@app.route("/anal/character")
+# Test example：http://127.0.0.1:5000/anal/character?shape=relationship
+def app_anal_character():
+    shape = request.args.get("shape") 
+    draw = anal_character.generate_relationship_graph(shape)       
+    return draw.dump_options_with_quotes()
+
+    
+
+
 
 
 app.run(debug=True)
