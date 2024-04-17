@@ -7,7 +7,7 @@ const { Title, Paragraph } = Typography;
 const BoardCharacterPage: React.FC = () => {
   return (
     <>
-      <Title>Character of novel</Title>
+      <Title>Character of Novel</Title>
       <Paragraph></Paragraph>
     </>
   );
