@@ -3,7 +3,7 @@ from flask import jsonify
 from fetch.fetch_novel import FetchNovel
 from fetch.fetch_cover import FetchCover
 from fetch.fetch_banner import FetchBanner
-from fetch.fetch_character import FetchCharacter
+from anal.anal_character import FetchCharacter
 from anal.anal_type import AnalType
 from anal.anal_author import AnalAuthor
 from anal.anal_comment import AnalComment
