@@ -4,9 +4,9 @@ name: build-deploy
 on:
   push:
     branches: [release]
-  paths:
-    - ".github/workflows/build-deploy.yml"
-    - "web/**"
+    paths:
+      - ".github/workflows/build-deploy.yml"
+      - "web/**"
   pull_request: {}
 
   # Allows you to run this workflow manually from the Actions tab
