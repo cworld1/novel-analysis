@@ -77,7 +77,7 @@ const AboutPage: React.FC = () => {
             />
           }
           title={item.title}
-          description={item.desc ?? "loaf on a job"}
+          description={item.desc ?? "Loaf on a job"}
         />
       </List.Item>
     );
@@ -86,6 +86,7 @@ const AboutPage: React.FC = () => {
   return (
     <div>
       <Title>About</Title>
+
       <Title level={4}>Project</Title>
       <Paragraph>
         A simple project for analyzing Chinese novels. All data is crawled from{" "}
@@ -99,9 +100,26 @@ const AboutPage: React.FC = () => {
             window.open("https://github.com/cworld1/novel_analysis", "_blank")
           }
         >
-          Github
+          Novel Analysis
         </Button>
       </Paragraph>
+
+      <Title level={4}>Data</Title>
+      <Paragraph>
+        The repository following also contains the data, which has been a
+        submodule part of this project.
+      </Paragraph>
+      <Paragraph>
+        <Button
+          icon={<GithubOutlined />}
+          onClick={() =>
+            window.open("https://github.com/cworld1/novel-data", "_blank")
+          }
+        >
+          Novel Data
+        </Button>
+      </Paragraph>
+
       <Title level={4}>Team Members</Title>
       <List
         bordered

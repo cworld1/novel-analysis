@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+// Antd
+import { Typography } from "antd";
+const { Paragraph } = Typography;
 
 interface TypewriterProps {
   children: React.ReactNode[];
@@ -37,7 +40,11 @@ const Typewriter: React.FC<TypewriterProps> = ({
     }
   }, [displayText, nodeIndex, charIndex, typingCompleted]);
 
-  return <div dangerouslySetInnerHTML={{ __html: displayText }} />;
+  return (
+    <Paragraph>
+      <span dangerouslySetInnerHTML={{ __html: displayText }} />
+    </Paragraph>
+  );
 };
 
 export default Typewriter;
