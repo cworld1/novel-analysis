@@ -1,16 +1,28 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 // Antd
-import { Alert, Card, Carousel, Col, Row, theme, Typography } from "antd";
-import { ArrowRightOutlined } from "@ant-design/icons";
-import { ConfigContext } from "../components/ConfigProvider";
-const { Meta } = Card;
+import {
+  Alert,
+  Card,
+  Carousel,
+  Col,
+  Popconfirm,
+  Row,
+  theme,
+  Typography,
+} from "antd";
+import { ArrowRightOutlined, InfoCircleOutlined } from "@ant-design/icons";
 const { Title } = Typography;
+// Components
+import { ConfigContext } from "../components/ConfigProvider";
+import Typewriter from "../components/TypeWriter";
 
 // Book interface
 interface BookInfo {
+  bookId: string;
   bookName: string;
   authorName: string;
+  comments: string[];
 }
 interface BookCardProps {
   book: BookInfo;
@@ -78,33 +90,50 @@ const BookCard: React.FC<BookCardProps> = ({ book, image, loading }) => {
   } = theme.useToken();
 
   return (
-    <Card
-      hoverable
-      style={{
-        width: "100%",
-        display: "flex",
-        overflow: "hidden",
-        justifyContent: "space-between",
-      }}
-      cover={
-        image ? (
-          <img
-            alt="cover"
-            style={{
-              width: 90,
-              height: 120,
-              objectFit: "cover",
-              borderRadius: borderRadius,
-            }}
-            src={`data:image/jpeg;base64,${image}`}
-          />
-        ) : null
+    <Popconfirm
+      title="AI Comment"
+      description={
+        <div style={{ width: 500, marginRight: 20 }}>
+          <Typewriter texts={book.comments} />
+        </div>
       }
-      loading={loading}
-      actions={[<ArrowRightOutlined style={{ paddingRight: 15 }} key="go" />]}
+      okText=<>
+        Read <ArrowRightOutlined style={{ fontSize: 10 }} />
+      </>
+      showCancel={false}
+      icon={<InfoCircleOutlined style={{ color: "grey" }} />}
+      onConfirm={() =>
+        window.open(`https://www.hongxiu.com/book/${book.bookId}`, "_blank")
+      }
     >
-      <Meta title={book.bookName} description={book.authorName} />
-    </Card>
+      <Card
+        hoverable
+        style={{
+          width: "100%",
+          display: "flex",
+          overflow: "hidden",
+          justifyContent: "space-between",
+        }}
+        cover={
+          image ? (
+            <img
+              alt="cover"
+              style={{
+                width: 90,
+                height: 120,
+                objectFit: "cover",
+                borderRadius: borderRadius,
+              }}
+              src={`data:image/jpeg;base64,${image}`}
+            />
+          ) : null
+        }
+        loading={loading}
+        actions={[<ArrowRightOutlined style={{ paddingRight: 15 }} key="go" />]}
+      >
+        <Card.Meta title={book.bookName} description={book.authorName} />
+      </Card>
+    </Popconfirm>
   );
 };
 
@@ -126,18 +155,16 @@ const BoardHomePage: React.FC = () => {
   const { serverAddress } = useContext(ConfigContext);
   useEffect(() => {
     // Fetch banner info
-    axios
-      .get<BannerInfo[]>(`${serverAddress}/fetch/banners`)
-      .then((response) => {
-        setBanners(response.data);
-      });
+    axios.get<BannerInfo[]>(`${serverAddress}/fetch/banners`).then((res) => {
+      setBanners(res.data);
+    });
 
     // Fetch book info
     const bookUrl = `${serverAddress}/fetch/novel?choose=random&count=${bookCount}`;
     axios
       .get<BookInfo[]>(bookUrl)
-      .then((response) => {
-        setBooks(response.data);
+      .then((res) => {
+        setBooks(res.data);
         setBookLoading(false);
       })
       .catch((error) => console.error("Error:", error));
@@ -146,8 +173,8 @@ const BoardHomePage: React.FC = () => {
     const imageUrl = `${serverAddress}/fetch/cover?count=${bookCount}`;
     axios
       .get<string[]>(imageUrl)
-      .then((response) => {
-        setBookImages(response.data);
+      .then((res) => {
+        setBookImages(res.data);
         setBookLoading(false);
       })
       .catch((error) => console.error("Error:", error));

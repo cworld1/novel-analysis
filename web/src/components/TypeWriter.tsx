@@ -4,13 +4,15 @@ import { Typography } from "antd";
 const { Paragraph } = Typography;
 
 interface TypewriterProps {
-  textArray: string[];
-  typingSpeed?: number;
+  texts: string[];
+  speed?: number;
+  delay?: number; // New optional prop to set typing delay
 }
 
 const Typewriter: React.FC<TypewriterProps> = ({
-  textArray,
-  typingSpeed = 100,
+  texts: textArray,
+  speed = 100,
+  delay = 0,
 }) => {
   const [displayText, setDisplayText] = useState<string[]>([]);
   const [arrayIndex, setArrayIndex] = useState(0);
@@ -18,17 +20,28 @@ const Typewriter: React.FC<TypewriterProps> = ({
   const [typingCompleted, setTypingCompleted] = useState(false);
 
   useEffect(() => {
-    if (!typingCompleted) {
+    setDisplayText([]);
+    setArrayIndex(0);
+    setCharIndex(0);
+    setTypingCompleted(false);
+  }, [textArray]);
+
+  useEffect(() => {
+    if (typingCompleted) return;
+    if (textArray.length === 0) {
+      setTypingCompleted(true);
+      return;
+    }
+
+    const startTyping = () => {
       const text = textArray[arrayIndex];
 
-      const timer = setTimeout(() => {
+      const typingTimer = setTimeout(() => {
         setDisplayText((prev) => {
           const newPrev = [...prev];
           if (newPrev[arrayIndex]) {
-            // If this line already exists, add a character at the end of this line
             newPrev[arrayIndex] += text[charIndex];
           } else {
-            // If this line does not exist, create it and add characters
             newPrev[arrayIndex] = text[charIndex];
           }
           return newPrev;
@@ -42,16 +55,24 @@ const Typewriter: React.FC<TypewriterProps> = ({
         } else {
           setTypingCompleted(true);
         }
-      }, typingSpeed);
+      }, speed);
 
-      return () => clearTimeout(timer);
+      return () => clearTimeout(typingTimer);
+    };
+
+    if (arrayIndex === 0 && charIndex === 0) {
+      // Only apply delay for the first time a non-empty textArray is received
+      const delayTimer = setTimeout(startTyping, delay);
+      return () => clearTimeout(delayTimer);
+    } else {
+      startTyping();
     }
-  }, [displayText, arrayIndex, charIndex, typingCompleted]);
+  }, [arrayIndex, charIndex, typingCompleted, textArray, delay]);
 
   return (
     <>
-      {displayText.map((line) => (
-        <Paragraph>{line}</Paragraph>
+      {displayText.map((line, index) => (
+        <Paragraph key={index}>{line}</Paragraph>
       ))}
     </>
   );
