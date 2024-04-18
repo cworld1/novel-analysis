@@ -24,6 +24,15 @@ def crawl():
     # Crawl the author info and the author's books
     # authorCrawler.crawl(ids, lambda book: infoAuthorCrawler.crawl(book)),
 
+from flask import Flask, jsonify
+from datetime import datetime
+import os
+
+app = Flask(__name__)
+
+def crawl_time():
+    # 获取当前时间
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 if __name__ == "__main__":
     crawl()

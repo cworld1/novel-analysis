@@ -1,5 +1,6 @@
 from flask import Flask, request, send_file, jsonify
 import threading
+import os
 
 from crawl.main import crawl
 from fetch.fetch_novel import FetchNovel
@@ -61,6 +62,26 @@ def app_refresh_data():
 def refresh_status():
     global is_refreshing
     return jsonify({"status": is_refreshing}), 200
+
+# Get refresh time
+# from flask import Flask, jsonify
+# import os
+
+# app = Flask(__name__)
+
+# # Path to the file storing refresh times
+# REFRESH_TIME_FILE = "./data/refresh_times.txt"
+@app.route("/crawl/refresh-time")
+def refresh_time():
+    # 调用函数获取当前时间
+    current_time = crawl_time()
+    # 可以选择将时间记录到文件，如果需要历史记录
+    filename = "./data/crawl_times.txt"
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, "a") as file:
+        file.write(f"{current_time}\n")
+    # 返回最新的刷新时间
+    return jsonify({"last_refresh_time": current_time}), 200
 
 
 ### Fetch basic infos ###
