@@ -1,6 +1,14 @@
 import React, { useContext, useState } from "react";
 // Antd
-import { Button, ColorPicker, Input, List, Select, Typography } from "antd";
+import {
+  Button,
+  ColorPicker,
+  Input,
+  List,
+  message,
+  Select,
+  Typography,
+} from "antd";
 const { Title } = Typography;
 // Components
 import { ConfigContext } from "../components/ConfigProvider";
@@ -13,6 +21,7 @@ import {
 } from "@ant-design/icons";
 
 const SettingsPage: React.FC = () => {
+  const key = "updatable";
   const {
     currentTheme,
     setCurrentTheme,
@@ -23,6 +32,23 @@ const SettingsPage: React.FC = () => {
   } = useContext(ConfigContext);
   // save address input for setting content of setaddress
   const [inputValue, setInputValue] = useState(serverAddress);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const openMessage = () => {
+    messageApi.open({
+      key,
+      type: "loading",
+      content: "Loading...",
+    });
+    setTimeout(() => {
+      messageApi.open({
+        key,
+        type: "success",
+        content: "Loaded!",
+        duration: 2,
+      });
+    }, 1000);
+  };
 
   const serverData = [
     {
@@ -81,15 +107,21 @@ const SettingsPage: React.FC = () => {
       avatar: <ReloadOutlined style={{ fontSize: 27, height: 48 }} />,
       desc: "Update the database schema to the latest version",
       actions: [
-        <Button>Update force</Button>,
-        <Button type="primary">Update</Button>,
+        <Button onClick={openMessage}>Update force</Button>,
+        <Button type="primary" onClick={openMessage}>
+          Update
+        </Button>,
       ],
     },
     {
       title: "Clear darabase",
       avatar: <DeleteOutlined style={{ fontSize: 27, height: 48 }} />,
       desc: "Clear the database and reset to the default state",
-      actions: [<Button danger>Clear</Button>],
+      actions: [
+        <Button danger onClick={openMessage}>
+          Clear
+        </Button>,
+      ],
     },
   ];
 
@@ -105,6 +137,7 @@ const SettingsPage: React.FC = () => {
 
   return (
     <>
+      {contextHolder}
       <Title>Settings</Title>
       <Title level={4}>Server</Title>
       <List
