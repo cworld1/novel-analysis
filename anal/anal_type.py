@@ -56,6 +56,7 @@ class AnalType:
         # Calculate mean popularity
         for key in type_popularity:
             type_popularity[key] /= type_counts[key]
+            type_popularity[key] = int(type_popularity[key])
         type_popularity = dict(
             sorted(type_popularity.items(), key=lambda x: x[1], reverse=True)
         )
