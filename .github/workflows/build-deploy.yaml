@@ -37,10 +37,6 @@ jobs:
       # Setup bun
       - uses: oven-sh/setup-bun@v1
 
-      # Install dependencies
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-
       # Cache the bun install directory
       - uses: actions/cache@v4
         with:
@@ -48,6 +44,10 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.bun }}-bun-${{ hashFiles('**/bun.lockb') }}
           restore-keys: |
             ${{ runner.os }}-${{ matrix.bun }}-bun-
+
+      # Install dependencies
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
 
       # Build the site
       - name: Build
