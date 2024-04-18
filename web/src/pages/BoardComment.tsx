@@ -58,7 +58,7 @@ const BoardAuthorPage: React.FC = () => {
       key: String(index),
       label: book.bookName,
       children: [
-        <Typewriter textArray={book.comments}></Typewriter>,
+        <Typewriter texts={book.comments}></Typewriter>,
         <Paragraph>
           {book.bookId != "" && (
             <Button
