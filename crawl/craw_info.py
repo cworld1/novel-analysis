@@ -72,7 +72,7 @@ class CrawlInfo:
         json_data = json.dumps(
             merged_data, indent=4, ensure_ascii=False
         )  # indent=4 for pretty print, optional
-        with open(file_path, "w") as file:
+        with open(file_path, "w", encoding="utf-8") as file:
             file.write(json_data)
         print("File write:", file_path)
 
