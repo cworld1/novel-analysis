@@ -3,7 +3,6 @@ import axios from "axios";
 // Antd
 import { Typography } from "antd";
 const { Title, Paragraph } = Typography;
-// Echarts
 // Components
 import { ConfigContext } from "../components/ConfigProvider";
 import ChartComponent from "../components/Chart";

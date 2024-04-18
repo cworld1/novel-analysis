@@ -1,18 +1,21 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 // Antd
-import { FloatButton, Layout } from "antd";
-import { ReloadOutlined } from "@ant-design/icons";
+import { Layout, message } from "antd";
 // Components
 import TopAppBar from "./components/TopAppBar";
 import { RouteContent } from "./components/Routes";
 import { ConfigProvider } from "./components/ConfigProvider";
+import FloatButtons from "./components/FloatButton";
 
 const App: React.FC = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+
   return (
     <Router>
       <ConfigProvider>
         <Layout style={{ minHeight: "100vh" }}>
+          {contextHolder}
           {/* Header */}
           <TopAppBar />
           {/* Contents */}
@@ -21,14 +24,7 @@ const App: React.FC = () => {
           </div>
         </Layout>
         {/* Float button */}
-        <FloatButton.Group shape="circle" style={{ right: 24 }}>
-          <FloatButton.BackTop visibilityHeight={300} />
-          <FloatButton
-            icon={<ReloadOutlined />}
-            type="primary"
-            tooltip={<div>Reload</div>}
-          />
-        </FloatButton.Group>
+        <FloatButtons messageApi={messageApi} />
       </ConfigProvider>
     </Router>
   );

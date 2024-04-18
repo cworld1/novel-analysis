@@ -78,5 +78,5 @@ class CrawlInfo:
 
 
 # Test
-crawler = CrawlInfo()
-crawler.crawl("8263527304935303")
+# crawler = CrawlInfo()
+# crawler.crawl("8263527304935303")
