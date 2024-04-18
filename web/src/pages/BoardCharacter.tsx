@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import axios, { spread } from "axios";
 // Antd
 import { Collapse, CollapseProps, Flex, List, Typography } from "antd";
 const { Title, Paragraph, Text } = Typography;
 // Components
 import { ConfigContext } from "../components/ConfigProvider";
 import ChartComponent from "../components/Chart";
+import Typewriter from "../components/TypeWriter";
 
 // Character interface
 interface CharacterInfo {
@@ -56,35 +57,45 @@ const BoardCharacterPage: React.FC = () => {
       label: character.name,
       children: [
         <Paragraph>{character.desc}</Paragraph>,
-        <Paragraph>
-          <Flex>
-            <ChartComponent
-              width={350}
-              height={"auto"}
-              option={JSON.parse(character.mbtiRadar)}
-              forceWidth
+        <Flex>
+          <ChartComponent
+            width={350}
+            height={"auto"}
+            option={JSON.parse(character.mbtiRadar)}
+            forceWidth
+          />
+          <div style={{ marginLeft: 20, width: "100%" }}>
+            <Title level={4}>
+              Personality: {character.mbti}，{character.mbtiDesc}
+            </Title>
+            <List
+              header={<Text strong>Evaluation</Text>}
+              bordered
+              dataSource={character.mbtiReasons}
+              renderItem={(item) => <List.Item>{item}</List.Item>}
             />
-            <div style={{ marginLeft: 20, width: "100%" }}>
-              <Title level={4}>
-                Personality: {character.mbti}，{character.mbtiDesc}
-              </Title>
-              <List
-                header={<Text>Evaluation</Text>}
-                bordered
-                dataSource={character.mbtiReasons}
-                renderItem={(item) => <List.Item>{item}</List.Item>}
-              />
-            </div>
-          </Flex>
-        </Paragraph>,
+          </div>
+        </Flex>,
         <Title level={4}>Character Description</Title>,
-        <Paragraph>{character.characterDesc}</Paragraph>,
+        <Typewriter texts={[character.characterDesc]} speed={50}></Typewriter>,
         <Title level={4}>Development in Novel</Title>,
-        <Paragraph>{character.develop}</Paragraph>,
+        <Typewriter
+          texts={[character.develop]}
+          speed={50}
+          delay={6000}
+        ></Typewriter>,
         <Title level={4}>Social Character Relationships</Title>,
-        <Paragraph>{character.relationship}</Paragraph>,
+        <Typewriter
+          texts={[character.relationship]}
+          speed={50}
+          delay={6000 * 2}
+        ></Typewriter>,
         <Title level={4}>Social Character Background & Role in Novel</Title>,
-        <Paragraph>{character.socialBackground}</Paragraph>,
+        <Typewriter
+          texts={[character.relationship]}
+          speed={50}
+          delay={6000 * 3}
+        ></Typewriter>,
       ],
     };
   });

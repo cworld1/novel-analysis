@@ -4,15 +4,15 @@ import { Typography } from "antd";
 const { Paragraph } = Typography;
 
 interface TypewriterProps {
-  textArray: string[];
+  texts: string[];
   speed?: number;
   delay?: number; // New optional prop to set typing delay
 }
 
 const Typewriter: React.FC<TypewriterProps> = ({
-  textArray,
+  texts: textArray,
   speed = 100,
-  delay = 0, // By default, delay time is 0
+  delay = 0,
 }) => {
   const [displayText, setDisplayText] = useState<string[]>([]);
   const [arrayIndex, setArrayIndex] = useState(0);
@@ -27,42 +27,47 @@ const Typewriter: React.FC<TypewriterProps> = ({
   }, [textArray]);
 
   useEffect(() => {
-    if (typingCompleted || textArray.length == 0) return;
-    // Always start with a delay timer, it will be 0 if no delay is specified
-    const delayTimer = setTimeout(
-      () => {
-        const text = textArray[arrayIndex];
+    if (typingCompleted) return;
+    if (textArray.length === 0) {
+      setTypingCompleted(true);
+      return;
+    }
 
-        const typingTimer = setTimeout(() => {
-          setDisplayText((prev) => {
-            const newPrev = [...prev];
-            if (newPrev[arrayIndex]) {
-              // If this line already exists, add a character at the end of this line
-              newPrev[arrayIndex] += text[charIndex];
-            } else {
-              // If this line does not exist, create it and add character to it
-              newPrev[arrayIndex] = text[charIndex];
-            }
-            return newPrev;
-          });
+    const startTyping = () => {
+      const text = textArray[arrayIndex];
 
-          if (charIndex < text.length - 1) {
-            setCharIndex((prev) => prev + 1);
-          } else if (arrayIndex < textArray.length - 1) {
-            setArrayIndex((prev) => prev + 1);
-            setCharIndex(0);
+      const typingTimer = setTimeout(() => {
+        setDisplayText((prev) => {
+          const newPrev = [...prev];
+          if (newPrev[arrayIndex]) {
+            newPrev[arrayIndex] += text[charIndex];
           } else {
-            setTypingCompleted(true);
+            newPrev[arrayIndex] = text[charIndex];
           }
-        }, speed);
+          return newPrev;
+        });
 
-        return () => clearTimeout(typingTimer);
-      },
-      arrayIndex > 0 ? delay : 0
-    );
+        if (charIndex < text.length - 1) {
+          setCharIndex((prev) => prev + 1);
+        } else if (arrayIndex < textArray.length - 1) {
+          setArrayIndex((prev) => prev + 1);
+          setCharIndex(0);
+        } else {
+          setTypingCompleted(true);
+        }
+      }, speed);
 
-    return () => clearTimeout(delayTimer);
-  }, [arrayIndex, charIndex, typingCompleted, textArray]);
+      return () => clearTimeout(typingTimer);
+    };
+
+    if (arrayIndex === 0 && charIndex === 0) {
+      // Only apply delay for the first time a non-empty textArray is received
+      const delayTimer = setTimeout(startTyping, delay);
+      return () => clearTimeout(delayTimer);
+    } else {
+      startTyping();
+    }
+  }, [arrayIndex, charIndex, typingCompleted, textArray, delay]);
 
   return (
     <>
