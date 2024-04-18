@@ -97,7 +97,8 @@ def app_anal_commment():
 # Test example：http://127.0.0.1:5000/anal/character?name=longzu
 def app_anal_character():
     name = request.args.get("name")
-    return anal_character.anal(name)
+    shape = request.args.get("shape")
+    return anal_character.anal(name, shape)
 
 
 app.run(debug=True)

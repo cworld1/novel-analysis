@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import axios, { spread } from "axios";
+import axios from "axios";
 // Antd
 import { Collapse, CollapseProps, Flex, List, Typography } from "antd";
 const { Title, Paragraph, Text } = Typography;
@@ -23,6 +23,7 @@ interface CharacterInfo {
 }
 
 const BoardCharacterPage: React.FC = () => {
+  const [graph, setGraph] = useState();
   const [characters, setCharacters] = useState<Array<CharacterInfo>>(
     Array<CharacterInfo>(5).fill({
       name: "",
@@ -39,16 +40,27 @@ const BoardCharacterPage: React.FC = () => {
   );
   const { serverAddress } = useContext(ConfigContext);
 
+  const getImage = async (shape: string) => {
+    return axios
+      .get(`${serverAddress}/anal/character?name=longzu&shape=${shape}`)
+      .then((res) => res.data);
+  };
   useEffect(() => {
     // Fetch character info
     axios
-      .get<CharacterInfo[]>(`${serverAddress}/anal/character?name=longzu`)
-      .then((response) => {
-        setCharacters(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
+      .get<CharacterInfo[]>(
+        `${serverAddress}/anal/character?name=longzu&shape=radar`
+      )
+      .then((res) => {
+        setCharacters(res.data);
       });
+
+    // Fetch character graph
+    const fetchData = async () => {
+      getImage("graph").then((data) => setGraph(data));
+    };
+
+    fetchData();
   }, []);
 
   const items: CollapseProps["items"] = characters?.map((character, index) => {
@@ -112,6 +124,10 @@ const BoardCharacterPage: React.FC = () => {
         defaultActiveKey={["1"]}
         // onChange={onChange}
       />
+      <Title level={3}>Character Relationship</Title>
+      <Paragraph>
+        <ChartComponent option={graph} height={700} />
+      </Paragraph>
     </>
   );
 };
