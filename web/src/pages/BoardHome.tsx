@@ -151,6 +151,7 @@ const BoardHomePage: React.FC = () => {
     Array(bookCount).fill("")
   );
   const [bookLoading, setBookLoading] = useState(true);
+  const [updatetime, setUpdatetime] = useState();
 
   const { serverAddress } = useContext(ConfigContext);
   useEffect(() => {
@@ -160,12 +161,21 @@ const BoardHomePage: React.FC = () => {
     });
 
     // Fetch book info
-    const bookUrl = `${serverAddress}/fetch/novel?choose=random&count=${bookCount}`;
     axios
-      .get<BookInfo[]>(bookUrl)
+      .get<BookInfo[]>(
+        `${serverAddress}/fetch/novel?choose=random&count=${bookCount}`
+      )
       .then((res) => {
         setBooks(res.data);
         setBookLoading(false);
+      })
+      .catch((error) => console.error("Error:", error));
+
+    axios
+      .get(`${serverAddress}/crawl/get-time`)
+      .then((res) => {
+        console.log(res.data);
+        setUpdatetime(res.data);
       })
       .catch((error) => console.error("Error:", error));
 
@@ -182,12 +192,14 @@ const BoardHomePage: React.FC = () => {
 
   return (
     <>
-      <Alert
-        message="Data updated at Apr 16, Tuesday"
-        type="success"
-        showIcon
-        closable
-      />
+      {updatetime && (
+        <Alert
+          message={`Data updated at ${updatetime}`}
+          type="success"
+          showIcon
+          closable
+        />
+      )}
       <Title>Dashboard</Title>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <BannerCarousel bannerinfos={banners} />

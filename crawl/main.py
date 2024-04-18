@@ -8,6 +8,28 @@ author_book_folder = "author_book_info"  # the authors' book info stored folder
 forceUpdate = False  # whether to force update the data
 
 
+def crawl_time_setter():
+    # 更新当前刷新时间
+    filename = "./data/last_refresh_time.txt"
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(filename, "w") as file:
+        file.write(current_time)
+
+
+def crawl_time_getter():
+    filename = "./data/last_refresh_time.txt"
+
+    # 读取上次刷新时间
+    try:
+        with open(filename, "r") as file:
+            last_refresh_time = file.read().strip()
+    except FileNotFoundError:
+        last_refresh_time = "Never"
+
+    return last_refresh_time
+
+
 def crawl():
     rankingsCrawler = CrawlRankings(path)
     infoBookCrawler = CrawlInfo(path, rank_book_folder, forceUpdate=forceUpdate)
@@ -21,32 +43,17 @@ def crawl():
             infoBookCrawler.crawl(id),
         )
     )
+
+    crawl_time_setter()
     # Crawl the author info and the author's books
     # authorCrawler.crawl(ids, lambda book: infoAuthorCrawler.crawl(book)),
+
 
 from flask import Flask, jsonify
 from datetime import datetime
 import os
 
 app = Flask(__name__)
-
-def crawl_time():
-    filename = "./data/last_refresh_time.txt"
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
-    
-    # 读取上次刷新时间
-    try:
-        with open(filename, "r") as file:
-            last_refresh_time = file.read().strip()
-    except FileNotFoundError:
-        last_refresh_time = "Never"
-
-    # 更新当前刷新时间
-    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open(filename, "w") as file:
-        file.write(current_time)
-    
-    return last_refresh_time
 
 
 if __name__ == "__main__":
