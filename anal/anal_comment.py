@@ -44,9 +44,6 @@ class AnalComment:
             "Sentiment",
             [("Positive", positive), ("Neutral", neutral), ("Negative", negative)],
         )
-        pie_chart.set_global_opts(
-            title_opts=opts.TitleOpts(title="Sentiment Analysis Pie Chart")
-        )
         return pie_chart
 
     def create_line_chart(self, num_days, trend_type):
@@ -59,9 +56,6 @@ class AnalComment:
         line_chart = Line()
         line_chart.add_xaxis(dates)
         line_chart.add_yaxis("Sentiment Score", sentiments)
-        line_chart.set_global_opts(
-            title_opts=opts.TitleOpts(title="Sentiment Score Over Time")
-        )
         return line_chart
 
     def fake_sentiment_analysis(self):
