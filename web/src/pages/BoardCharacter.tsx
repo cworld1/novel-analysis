@@ -118,16 +118,12 @@ const BoardCharacterPage: React.FC = () => {
       <Paragraph>
         Using the novel "Longzu" as an example for character analysis.
       </Paragraph>
-      <Title level={3}>Specific analysis of novel characters</Title>
-      <Collapse
-        items={items}
-        defaultActiveKey={["1"]}
-        // onChange={onChange}
-      />
       <Title level={3}>Character Relationship</Title>
       <Paragraph>
         <ChartComponent option={graph} height={700} />
       </Paragraph>
+      <Title level={3}>Specific analysis of novel characters</Title>
+      <Collapse items={items} />
     </>
   );
 };
