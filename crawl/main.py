@@ -1,6 +1,6 @@
-from crawl_rankings import CrawlRankings
-from craw_info import CrawlInfo
-from crawl_author import CrawlAuthor
+from crawl.crawl_rankings import CrawlRankings
+from crawl.craw_info import CrawlInfo
+from crawl.crawl_author import CrawlAuthor
 
 path = "./data"  # path where the data will be stored
 rank_book_folder = "rank_book_info"  # ranks' book info stored folder
@@ -11,8 +11,8 @@ forceUpdate = False  # whether to force update the data
 def crawl():
     rankingsCrawler = CrawlRankings(path)
     infoBookCrawler = CrawlInfo(path, rank_book_folder, forceUpdate=forceUpdate)
-    infoAuthorCrawler = CrawlInfo(path, author_book_folder, forceUpdate=forceUpdate)
-    authorCrawler = CrawlAuthor(path)
+    # infoAuthorCrawler = CrawlInfo(path, author_book_folder, forceUpdate=forceUpdate)
+    # authorCrawler = CrawlAuthor(path)
 
     # Crawl the rankings
     ids = rankingsCrawler.crawl(
