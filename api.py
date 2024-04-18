@@ -1,7 +1,7 @@
 from flask import Flask, request, send_file, jsonify
 import threading
 
-from crawl.main import crawl
+from crawl.main import crawl, crawl_time_getter
 from fetch.fetch_novel import FetchNovel
 from fetch.fetch_cover import FetchCover
 from fetch.fetch_banner import FetchBanner
@@ -9,7 +9,6 @@ from anal.anal_character import AnalCharacter
 from anal.anal_type import AnalType
 from anal.anal_author import AnalAuthor
 from anal.anal_comment import AnalComment
-from crawl.main import crawl_time
 
 fetch_novel = FetchNovel(sub_folder="rank_book_info")
 fetch_cover = FetchCover()
@@ -53,7 +52,7 @@ def app_refresh_data():
 
     thread = threading.Thread(target=async_refresh)
     thread.start()
-    return jsonify({"status": "Data refresh triggered"}), 200
+    return jsonify({"status": crawl_time_getter()}), 200
 
 
 # Get refresh status
@@ -63,12 +62,11 @@ def refresh_status():
     global is_refreshing
     return jsonify({"status": is_refreshing}), 200
 
-# Get refresh time
-@app.route("/crawl/refresh-time")
-def refresh_time():
-    last_refresh_time = crawl_time()
-    return jsonify({"last_refresh_time": last_refresh_time}), 200
 
+# Get refresh time
+@app.route("/crawl/get-time")
+def refresh_time():
+    return crawl_time_getter(), 200
 
 
 ### Fetch basic infos ###
