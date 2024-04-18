@@ -31,8 +31,23 @@ import os
 app = Flask(__name__)
 
 def crawl_time():
-    # 获取当前时间
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    filename = "./data/last_refresh_time.txt"
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    
+    # 读取上次刷新时间
+    try:
+        with open(filename, "r") as file:
+            last_refresh_time = file.read().strip()
+    except FileNotFoundError:
+        last_refresh_time = "Never"
+
+    # 更新当前刷新时间
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(filename, "w") as file:
+        file.write(current_time)
+    
+    return last_refresh_time
+
 
 if __name__ == "__main__":
     crawl()
