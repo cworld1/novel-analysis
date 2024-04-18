@@ -61,6 +61,6 @@ class CrawlRankings:
 
 
 # Test
-crawler = CrawlRankings()
-crawler.crawl()
+# crawler = CrawlRankings()
+# crawler.crawl()
 # crawler.crawl(lambda id: print(id))

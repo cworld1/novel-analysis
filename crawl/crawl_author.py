@@ -65,6 +65,6 @@ class CrawlAuthor:
 
 
 # Test
-crawler = CrawlAuthor()
-crawler.crawl([8263527304935303, 17536776207350304])
+# crawler = CrawlAuthor()
+# crawler.crawl([8263527304935303, 17536776207350304])
 # crawler.crawl(lambda id: print(id))

@@ -1,5 +1,7 @@
-from flask import Flask, request, send_file
-from flask import jsonify
+from flask import Flask, request, send_file, jsonify
+import threading
+
+from crawl.main import crawl
 from fetch.fetch_novel import FetchNovel
 from fetch.fetch_cover import FetchCover
 from fetch.fetch_banner import FetchBanner
@@ -24,6 +26,41 @@ def add_cors_headers(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
     return response
+
+
+### Crawl novel infos ###
+is_refreshing = False
+
+
+# Refresh data
+@app.route("/crawl/refresh")
+# Test example：http://127.0.0.1:5000/crawl/refresh
+def app_refresh_data():
+    global is_refreshing
+    # Before starting the thread, mark is_refreshing as True
+    is_refreshing = True
+
+    def async_refresh():
+        with app.app_context():
+            # Place your refreshing function here
+            # It may be time-consuming
+            crawl()
+
+            # After crawl() is done, mark is_refreshing as False
+            global is_refreshing
+            is_refreshing = False
+
+    thread = threading.Thread(target=async_refresh)
+    thread.start()
+    return jsonify({"status": "Data refresh triggered"}), 200
+
+
+# Get refresh status
+@app.route("/crawl/refresh-status")
+# Test example：http://127.0.0.1:5000/crawl/refresh-status
+def refresh_status():
+    global is_refreshing
+    return jsonify({"status": is_refreshing}), 200
 
 
 ### Fetch basic infos ###
