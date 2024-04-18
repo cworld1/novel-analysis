@@ -57,7 +57,7 @@ const BoardTemplate: React.FC = () => {
         </Content>
         {/* Footer */}
         <Footer style={{ textAlign: "center" }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          Data Analysis ©{new Date().getFullYear()} Created by CWorld
         </Footer>
       </Layout>
     </Layout>

@@ -60,7 +60,7 @@ const TopAppBar: React.FC = () => {
       <Flex className="logo" style={{ width: 200 - 34 }}>
         <img src={reactLogo} className="logo react" alt="React logo" />
         <span className="title" style={{ marginLeft: "10px" }}>
-          React
+          Data Analysis
         </span>
       </Flex>
       <Menu
