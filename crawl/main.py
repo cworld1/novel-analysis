@@ -22,7 +22,7 @@ def crawl():
         )
     )
     # Crawl the author info and the author's books
-    authorCrawler.crawl(ids, lambda book: infoAuthorCrawler.crawl(book)),
+    # authorCrawler.crawl(ids, lambda book: infoAuthorCrawler.crawl(book)),
 
 
 if __name__ == "__main__":
