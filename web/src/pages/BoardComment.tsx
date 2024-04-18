@@ -4,6 +4,8 @@ import axios from "axios";
 import { Button, Collapse, CollapseProps, Typography } from "antd";
 const { Title, Paragraph, Text } = Typography;
 import { ArrowRightOutlined } from "@ant-design/icons";
+// Echart
+import "echarts-wordcloud";
 // Components
 import { ConfigContext } from "../components/ConfigProvider";
 import Typewriter from "../components/TypeWriter";
@@ -19,7 +21,14 @@ interface BookInfo {
 
 const BoardAuthorPage: React.FC = () => {
   const bookCount = 12;
-  const [books, setBooks] = useState<Array<BookInfo>>();
+  const [books, setBooks] = useState<Array<BookInfo>>(
+    Array<BookInfo>(bookCount).fill({
+      bookId: "",
+      bookName: "",
+      authorName: "",
+      comments: [],
+    })
+  );
   const [wordcloud, setWordcloud] = useState();
   const { serverAddress } = useContext(ConfigContext);
 
@@ -51,16 +60,18 @@ const BoardAuthorPage: React.FC = () => {
       children: [
         <Typewriter textArray={book.comments}></Typewriter>,
         <Paragraph>
-          <Button
-            onClick={() =>
-              window.open(
-                `https://www.hongxiu.com/book/${book.bookId}`,
-                "_blank"
-              )
-            }
-          >
-            Read <ArrowRightOutlined />
-          </Button>
+          {book.bookId != "" && (
+            <Button
+              onClick={() =>
+                window.open(
+                  `https://www.hongxiu.com/book/${book.bookId}`,
+                  "_blank"
+                )
+              }
+            >
+              Read <ArrowRightOutlined />
+            </Button>
+          )}
         </Paragraph>,
       ],
       extra: <Text type="secondary">{book.authorName}</Text>,
