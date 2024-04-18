@@ -48,8 +48,8 @@ const BoardAuthorPage: React.FC = () => {
       .get<BookInfo[]>(
         `${serverAddress}/fetch/novel?choose=random&count=${bookCount}`
       )
-      .then((response) => {
-        setBooks(response.data);
+      .then((res) => {
+        setBooks(res.data);
       });
   }, []);
 

@@ -126,18 +126,16 @@ const BoardHomePage: React.FC = () => {
   const { serverAddress } = useContext(ConfigContext);
   useEffect(() => {
     // Fetch banner info
-    axios
-      .get<BannerInfo[]>(`${serverAddress}/fetch/banners`)
-      .then((response) => {
-        setBanners(response.data);
-      });
+    axios.get<BannerInfo[]>(`${serverAddress}/fetch/banners`).then((res) => {
+      setBanners(res.data);
+    });
 
     // Fetch book info
     const bookUrl = `${serverAddress}/fetch/novel?choose=random&count=${bookCount}`;
     axios
       .get<BookInfo[]>(bookUrl)
-      .then((response) => {
-        setBooks(response.data);
+      .then((res) => {
+        setBooks(res.data);
         setBookLoading(false);
       })
       .catch((error) => console.error("Error:", error));
@@ -146,8 +144,8 @@ const BoardHomePage: React.FC = () => {
     const imageUrl = `${serverAddress}/fetch/cover?count=${bookCount}`;
     axios
       .get<string[]>(imageUrl)
-      .then((response) => {
-        setBookImages(response.data);
+      .then((res) => {
+        setBookImages(res.data);
         setBookLoading(false);
       })
       .catch((error) => console.error("Error:", error));
