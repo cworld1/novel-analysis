@@ -65,7 +65,8 @@ def refresh_status():
 
 # Get refresh time
 @app.route("/crawl/get-time")
-def refresh_time():
+# Test example：http://127.0.0.1:5000/crawl/get-time
+def app_get_time():
     return crawl_time_getter(), 200
 
 
