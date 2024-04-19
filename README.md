@@ -17,9 +17,11 @@ A simple project for analyzing Chinese novels. All data is crawled from [红袖�
 
 - `anal`: Analysis scripts
 - `data`: Data directory
+- `database`: database script
 - `crawl`: Crawler scripts
 - `fetch`: Basic info for api scripts
 - `web`: Frontend dashboard
+
 
 ## Data Constructed
 
