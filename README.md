@@ -11,7 +11,26 @@ A simple project for analyzing Chinese novels. All data is crawled from [红袖�
 - Python: Flask, Pyecharts, statsmodels
 - Node.js: Bun, Vite, React, Ant Design
 - Database: Json, CSV
-<!-- - Rust: Pyo3 -->
+
+## Screenshots
+
+Main UI for the dashboard:
+
+![alt text](assets/PixPin_2024-06-17_17-24-10.png)
+![alt text](assets/PixPin_2024-06-17_17-26-48.png)
+![alt text](assets/PixPin_2024-06-17_17-27-13.png)
+
+<details>
+<summary>More screenshots</summary>
+
+![alt text](assets/PixPin_2024-06-17_17-24-39.png)
+![alt text](assets/PixPin_2024-06-17_17-25-09.png)
+![alt text](assets/PixPin_2024-06-17_17-25-22.png)
+![alt text](assets/PixPin_2024-06-17_17-25-37.png)
+![alt text](assets/PixPin_2024-06-17_17-25-53.png)
+![alt text](assets/PixPin_2024-06-17_17-26-09.png)
+
+</details>
 
 ## Project Structure
 
@@ -21,7 +40,6 @@ A simple project for analyzing Chinese novels. All data is crawled from [红袖�
 - `crawl`: Crawler scripts
 - `fetch`: Basic info for api scripts
 - `web`: Frontend dashboard
-
 
 ## Data Constructed
 
