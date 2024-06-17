@@ -30,7 +30,7 @@ const AboutPage: React.FC = () => {
       },
     },
     {
-      title: "Xiaohao",
+      title: "Mr. Xiao",
     },
   ];
 
