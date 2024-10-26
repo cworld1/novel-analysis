@@ -62,5 +62,5 @@ urllib3==2.2.2
     # via requests
 wcwidth==0.2.13
     # via prettytable
-werkzeug==3.0.3
+werkzeug==3.0.6
     # via flask
